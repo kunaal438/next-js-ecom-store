@@ -13,6 +13,7 @@ import axios from "axios";
 const Navbar = () => {
 
     const [userPanel, setUserPanel] = useState(false);
+    const [searchBoxVisible, setSearchBoxVisible] = useState(false);
 
     const { auth: isUserAuthenticated, email: loggedInUserEmail, admin } = useSelector(state => state.user);
     const dispatch = useDispatch();
@@ -39,23 +40,28 @@ const Navbar = () => {
 
     return (
 
-        <nav className="w-full h-[80px] py-2 px-[5vw] flex items-center justify-between border-b border-white-300">
+        <nav className="w-full h-[80px] py-2 px-[5vw] flex items-center justify-between border-b border-white-300 max-sm:mb-[60px]">
 
             <Link href={"/"}>
                 <Image src="/assets/logo.png" width={150} height={20} alt="Logo" />
             </Link>
 
-            <div className="flex items-center gap-7">
-                <Link href={"/"}>Home</Link>
-                <Link href={""}>Shop</Link>
-            </div>
+            <div className="flex items-center max-sm:gap-3 gap-6">
 
-            <div className="flex items-center gap-6">
-                {/* search input */}
-                <div className="relative">
-                    <input type="text" placeholder="Search Products" className="w-[500px] h-10 bg-white-200 py-2 px-3 text-sm pl-12 rounded-md" />
-                    <FontAwesomeIcon icon={faMagnifyingGlass} className="absolute left-4 top-1/2 -translate-y-1/2 text-black-200" />
+                <div className="max-sm:absolute max-sm:top-[80px] max-sm:left-0 max-sm:w-full max-sm:p-4 max-sm:h-[60px] max-sm:border-b border-white-300 max-sm:justify-center bg-white-100 flex items-center gap-7 mr-3">
+                    <Link href={"/"}>Home</Link>
+                    <Link href={""}>Shop</Link>
                 </div>
+
+                {/* search input */}
+                <div className={"lg:relative absolute max-lg:w-full max-lg:h-[60px] max-lg:border-b max-lg:border-white-300 max-lg:top-[80px] max-lg:left-0 max-lg:bg-white-100 max-lg:z-50 max-lg:p-2.5 " + ( !searchBoxVisible && "max-lg:hidden" )}>
+                    <input type="text" placeholder="Search Products" className="w-full lg:w-[450px] h-10 bg-white-200 py-2 px-3 text-sm pl-12 rounded-md" />
+                    <FontAwesomeIcon icon={faMagnifyingGlass} className="absolute max-lg:left-7 left-4 top-1/2 -translate-y-1/2 text-black-200" />
+                </div>
+
+                <button className="lg:hidden relative w-10 h-10 rounded-full bg-white-200 " onClick={() => setSearchBoxVisible(prev => !prev)}>
+                    <FontAwesomeIcon icon={faMagnifyingGlass} />
+                </button>
 
                 {
                     !isUserAuthenticated ?
@@ -74,7 +80,7 @@ const Navbar = () => {
 
                             {
                                 userPanel && 
-                                <div className="absolute right-0 top-[110%] bg-white-100 border border-white-200/50">
+                                <div className="absolute right-0 top-[110%] bg-white-100 border border-white-200/50 z-50">
                                     <Link href={"/orders"} className="p-4 capitalize text-black-100 block hover:bg-white-300/20">your orders</Link>
                                     {
                                         admin && <Link href={"/admin"} className="p-4 capitalize text-black-100 block hover:bg-white-300/20">Dashboard</Link>

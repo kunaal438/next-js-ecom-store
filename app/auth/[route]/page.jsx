@@ -17,7 +17,6 @@ import { login } from "@/reducer/user.redux";
 import signInWithGoogle from "@/utils/signInWithGoogle";
 import toast from "react-hot-toast";
 import { toastStyle } from "@/utils/toastStyles";
-import { setAdminStatus } from "@/reducer/admin.redux";
  
 const AuthPage = ({ params }) => {
 
