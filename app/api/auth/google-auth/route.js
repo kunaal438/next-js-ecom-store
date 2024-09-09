@@ -25,7 +25,7 @@ export const POST = async (req) => {
         
         await connectDB();
 
-        const userExists = await User.findOne({ email }).select('google_auth _id');
+        const userExists = await User.findOne({ email }).select('google_auth isAdmin _id');
         let userDocId;
         
         if(userExists){
@@ -62,7 +62,7 @@ export const POST = async (req) => {
 
         setAccessTokenCookie(token);
 
-        return new Response(JSON.stringify({ fullname: name, email }), { status: 200 })
+        return new Response(JSON.stringify({ fullname: name, email, admin: userExists.isAdmin }), { status: 200 })
 
     } catch(err){
         

@@ -24,7 +24,7 @@ export const POST = async (req) => {
 
         await connectDB();
 
-        const user = await User.findOne({ email }).select("password fullname _id");
+        const user = await User.findOne({ email }).select("password fullname isAdmin _id");
 
         if(!user){
             return new Response(JSON.stringify({ 
@@ -56,7 +56,7 @@ export const POST = async (req) => {
     
         setAccessTokenCookie(token);
 
-        return new Response(JSON.stringify({ fullname: user.fullname, email }), { status: 200 })
+        return new Response(JSON.stringify({ fullname: user.fullname, email, admin: user.isAdmin }), { status: 200 })
 
     } catch(err){
         console.log(err)

@@ -8,18 +8,33 @@ import { faBagShopping, faMagnifyingGlass, faUser } from "@fortawesome/free-soli
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@/reducer/user.redux";
+import axios from "axios";
 
 const Navbar = () => {
 
     const [userPanel, setUserPanel] = useState(false);
 
-    const { auth: isUserAuthenticated, email: loggedInUserEmail } = useSelector(state => state.user);
+    const { auth: isUserAuthenticated, email: loggedInUserEmail, admin } = useSelector(state => state.user);
     const dispatch = useDispatch();
 
     const handleBlurOnUserIcon = () => {
         setTimeout(() => {
             setUserPanel(false);
         }, 200)
+    }
+
+    const signOutUserFromSession = async () => {
+
+        try {
+
+            await axios.post('/api/auth/logout');
+
+            dispatch(logout());
+            
+        } catch(err){
+            console.error(err);
+        }
+    
     }
 
     return (
@@ -60,8 +75,11 @@ const Navbar = () => {
                             {
                                 userPanel && 
                                 <div className="absolute right-0 top-[110%] bg-white-100 border border-white-200/50">
-                                    <Link href={"/orders"} className="p-4 capitalize text-black-100 block hover:bg-white-300/5">your orders</Link>
-                                    <button className="text-left hover:bg-white-300/5 border-t border-white-200/50 text-lg p-4 font-medium" onClick={() => dispatch(logout())}>
+                                    <Link href={"/orders"} className="p-4 capitalize text-black-100 block hover:bg-white-300/20">your orders</Link>
+                                    {
+                                        admin && <Link href={"/admin"} className="p-4 capitalize text-black-100 block hover:bg-white-300/20">Dashboard</Link>
+                                    }
+                                    <button className="text-left hover:bg-white-300/5 border-t border-white-200/50 text-lg p-4 font-medium" onClick={signOutUserFromSession}>
                                         Sign Out
                                         <span className="block font-normal text-sm mt-1 text-black-100">{loggedInUserEmail}</span>
                                     </button>
