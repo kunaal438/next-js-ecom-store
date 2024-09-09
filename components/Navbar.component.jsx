@@ -40,18 +40,14 @@ const Navbar = () => {
 
     return (
 
-        <nav className="w-full h-[80px] py-2 px-[5vw] flex items-center justify-between border-b border-white-300 max-sm:mb-[60px]">
+        <nav className="w-full h-[80px] py-2 px-[5vw] flex items-center justify-between border-b border-white-300">
 
             <Link href={"/"}>
                 <Image src="/assets/logo.png" width={150} height={20} alt="Logo" />
             </Link>
 
             <div className="flex items-center max-sm:gap-3 gap-6">
-
-                <div className="max-sm:absolute max-sm:top-[80px] max-sm:left-0 max-sm:w-full max-sm:p-4 max-sm:h-[60px] max-sm:border-b border-white-300 max-sm:justify-center bg-white-100 flex items-center gap-7 mr-3">
-                    <Link href={"/"}>Home</Link>
-                    <Link href={""}>Shop</Link>
-                </div>
+                <Link href={""} className="mr-2 p-3">Shop</Link>
 
                 {/* search input */}
                 <div className={"lg:relative absolute max-lg:w-full max-lg:h-[60px] max-lg:border-b max-lg:border-white-300 max-lg:top-[80px] max-lg:left-0 max-lg:bg-white-100 max-lg:z-50 max-lg:p-2.5 " + ( !searchBoxVisible && "max-lg:hidden" )}>
@@ -83,7 +79,7 @@ const Navbar = () => {
                                 <div className="absolute right-0 top-[110%] bg-white-100 border border-white-200/50 z-50">
                                     <Link href={"/orders"} className="p-4 capitalize text-black-100 block hover:bg-white-300/20">your orders</Link>
                                     {
-                                        admin && <Link href={"/admin"} className="p-4 capitalize text-black-100 block hover:bg-white-300/20">Dashboard</Link>
+                                        admin && <Link href={"/admin/products"} className="p-4 capitalize text-black-100 block hover:bg-white-300/20">Dashboard</Link>
                                     }
                                     <button className="text-left hover:bg-white-300/5 border-t border-white-200/50 text-lg p-4 font-medium" onClick={signOutUserFromSession}>
                                         Sign Out

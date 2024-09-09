@@ -1,7 +1,14 @@
+'use client';
+
+import { useRouter } from "next/navigation";
+
 const AdminPage = () => {
-    return (
-        <h1>Admin Page</h1>
-    )
+
+    const router = useRouter();
+
+    router.push("/admin/products")
+
+    return null;
 }
 
 export default AdminPage;
