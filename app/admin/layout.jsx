@@ -1,5 +1,5 @@
 import AdminCheckWrapper from "@/components/AdminCheckWrapper";
-import AdminSideNavbar from "@/components/AdminSideNavbar.component";
+import SideNavbarWrapperLayout from "./sideNavbarWrapperLayout";
 
 export const metadata = {
     title: "Dashboard : Manage E-commercer store",
@@ -10,7 +10,7 @@ const AdminLayout = ({ children }) => {
         <div>
             <AdminCheckWrapper>
                 <div className="flex">
-                    <AdminSideNavbar />
+                    <SideNavbarWrapperLayout />
                     { children }
                 </div>
             </AdminCheckWrapper>

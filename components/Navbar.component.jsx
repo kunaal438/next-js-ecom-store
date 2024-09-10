@@ -47,7 +47,7 @@ const Navbar = () => {
             </Link>
 
             <div className="flex items-center max-sm:gap-3 gap-6">
-                <Link href={""} className="mr-2 p-3">Shop</Link>
+                <Link href={""} className="py-3 px-2">Shop</Link>
 
                 {/* search input */}
                 <div className={"lg:relative absolute max-lg:w-full max-lg:h-[60px] max-lg:border-b max-lg:border-white-300 max-lg:top-[80px] max-lg:left-0 max-lg:bg-white-100 max-lg:z-50 max-lg:p-2.5 " + ( !searchBoxVisible && "max-lg:hidden" )}>

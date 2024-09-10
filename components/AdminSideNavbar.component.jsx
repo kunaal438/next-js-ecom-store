@@ -62,7 +62,7 @@ const AdminSideNavbar = () => {
                     const { name, icon, link: route } = link;
 
                     return (
-                        <>
+                        <div key={i}>
                             <Link href={route} className={"relative px-4 h-16 flex items-center gap-4 w-full py-3 " + (isActive(route) ? "border-r-2 border-black-300" : "") }>
                                 <span className="w-10 h-10 rounded-full bg-white-300/20 flex items-center justify-center">
                                     <FontAwesomeIcon icon={icon} className="-mt-1"/>
@@ -72,7 +72,7 @@ const AdminSideNavbar = () => {
                             {
                                 i != adminNavigations.length - 1 && <hr className="border-white-200 mx-4" />
                             }
-                        </>
+                        </div>
                     )
 
                 })

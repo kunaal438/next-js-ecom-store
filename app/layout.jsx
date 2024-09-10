@@ -1,10 +1,7 @@
-import Navbar from "@/components/Navbar.component";
 import { config } from "@fortawesome/fontawesome-svg-core"
 import "@fortawesome/fontawesome-svg-core/styles.css"
 import "./globals.css";
 import LayoutWithProvider from "./layoutWithProvider";
-import UserAuthenticationState from "@/components/UserAuthenticationState.component";
-import { Toaster } from "react-hot-toast";
 
 config.autoAddCss = false;
 
@@ -17,17 +14,11 @@ export const metadata = {
 }
 
 const RootLayout = ({ children }) => {
-
     return (
         <html lang="en">
             <body>
                 <LayoutWithProvider>
-                    
-                    <UserAuthenticationState />
-                    <Toaster position="top-right" />
-                    <Navbar />
                     {children}
-
                 </LayoutWithProvider>
 			</body>
         </html>
