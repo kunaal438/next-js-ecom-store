@@ -15,3 +15,13 @@
 .primary_btn {
   @apply bg-black-300 text-white-100 rounded-full py-3 px-12 ;
 }
+
+.input-box-side-icon-parent{
+  @apply h-[87%] aspect-square bg-white-200/20 border border-r-0 border-white-200 rounded-tl-md rounded-bl-md flex items-center justify-center;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
