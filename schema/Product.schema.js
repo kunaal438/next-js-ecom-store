@@ -58,6 +58,15 @@ const ProductSchema = new Schema({
     details: {
         description: String,
         materialCare: String
+    },
+    sizes: {
+        type: [
+            {
+                name: String,
+                des: String,
+                stock: Number,
+            }
+        ]
     }
 
 })
