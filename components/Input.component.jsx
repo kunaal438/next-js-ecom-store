@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 
-const InputField = ({ refVal, type, disable, placeholder, name, displayError, max, onChange, value, inputClasses, onKeyDown, onFocus, onBlur }) => {
+const InputField = ({ refVal, type, disable, placeholder, name, displayError, max, onChange, value, inputClasses, onKeyDown, onFocus, onBlur, errorStyles }) => {
 
-    const [inputFocused, setInputFocus] = useState(false);
+    const [inputFocused, setInputFocus] = useState(value?.length ? true : false);
     
     const addFocus = () => {
         setInputFocus(true)
@@ -47,7 +47,7 @@ const InputField = ({ refVal, type, disable, placeholder, name, displayError, ma
                 
                 {
                     displayError && 
-                    <div className="w-full">
+                    <div className={"w-full " + errorStyles}>
                         <span className=" block break-words text-red-300 pb-2 ">* {displayError}</span>
                     </div>
                 }

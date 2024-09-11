@@ -1,8 +1,8 @@
 import React from "react"
 
-`export const metadata = {
+export const metadata = {
     title: "Add New Product : Ecommerce Store"
-}`
+}
 
 const AddProductLayout = ({ children }) => <>{children}</>
 

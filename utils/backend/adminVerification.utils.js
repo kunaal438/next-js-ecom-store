@@ -30,7 +30,7 @@ const validAdminRequest = async (req) => {
             }), { status: 403 })
         }
 
-        return { admin: user.isAdmin, _id: userId };
+        return userId;
 
     } catch(err){
         

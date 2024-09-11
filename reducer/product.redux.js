@@ -19,6 +19,10 @@ const productSlice = createSlice({
     initialState,
     reducers: {
 
+        setProductID: (state, action) => {
+            return { ...state, id: action.payload }
+        },
+
         setProductTitle: (state, action) => {
             return { ...state, title: action.payload }
         },
@@ -61,6 +65,6 @@ const productSlice = createSlice({
     }
 });
 
-export const { setProductTitle, setProductBrand, setProductStock, setProductSellingPrice, setProductActualPrice, setProductCategory, setProductColor, addProductTags, removeProductTags } = productSlice.actions;
+export const { setProductID, setProductTitle, setProductBrand, setProductStock, setProductSellingPrice, setProductActualPrice, setProductCategory, setProductColor, addProductTags, removeProductTags } = productSlice.actions;
 
 export default productSlice.reducer

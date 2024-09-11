@@ -1,4 +1,4 @@
-export const productCategories = ["Men's Clothing", "Women's Clothing", "Accessories"];
+export const productCategories = ["men's clothing", "women's clothing", "accessories"];
 
 export const productColors = [
     "black", "white", "red", "blue", "green", "yellow", "purple", "orange", "pink", "brown",

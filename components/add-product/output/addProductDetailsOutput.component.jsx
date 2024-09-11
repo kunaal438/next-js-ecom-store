@@ -23,7 +23,7 @@ const AddProductDetailsOutput = () => {
 
                     {
                         title.length ? 
-                        <p>{title}</p> :
+                        <p className="capitalize">{title}</p> :
                         <>
                         <div className="w-full h-5 bg-white-200/50"></div>
                         <div className="w-36 h-5 bg-white-200/50"></div>

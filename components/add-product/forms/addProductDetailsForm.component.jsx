@@ -2,15 +2,29 @@
 
 import InputField from "@/components/Input.component";
 import SelectInput from "@/components/SelectInput.component";
-import { setProductActualPrice, setProductSellingPrice, setProductTitle, setProductStock, setProductBrand, addProductTags, removeProductTags, setProductColor } from "@/reducer/product.redux";
+import { setProductActualPrice, setProductSellingPrice, setProductTitle, setProductStock, setProductBrand, addProductTags, removeProductTags, setProductColor, setProductCategory, setProductID } from "@/reducer/product.redux";
 import { productCategories, productColors } from "@/utils/productDetails";
 import { faBoxesStacked, faChevronLeft, faDollar, faTags, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useRef } from "react";
 import Link from "next/link";
+import Loader from "@/components/Loader.component";
+import ExtractFormData from "@/utils/ExtractFormData.utils";
+import validateProductDetailsForm from "@/utils/form-validations/product-details";
+import axios, { isAxiosError } from "axios";
+import toast from "react-hot-toast";
+import { toastStyle } from "@/utils/toastStyles";
+import { useRouter } from "next/navigation";
 
 const AddProductDetailsForm = () => {
+
+    // loading state
+    const [loading, setLoading] = useState(false);
+
+    // form error state
+    const [formErrors, setFormErrors] = useState({});
+    const formRef = useRef();
 
     // color field states & ref
     const [localColorArray, setLocalColorArray] = useState(null);
@@ -21,15 +35,65 @@ const AddProductDetailsForm = () => {
     const { brand, title, stock, price: { sellingPrice, actualPrice }, category, color, tags } = useSelector(state => state.product);
 
     const dispatch = useDispatch();
+    const router = useRouter();
 
     const maxBrandLength = 30;
     const maxTitleLength = 100;
     const maxTagsLimit = 10;
     const maxTagLength = 50;
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
+        
         e.preventDefault();
-        console.log('submit')
+
+        if(!formRef.current) { return }
+
+        const formData = ExtractFormData(formRef.current);
+
+        formData.tags = tags;
+
+        const validForm = validateProductDetailsForm(formData);
+
+        if(!validForm.isValid){ 
+            setFormErrors(validForm.error);
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+
+            const response = await axios.post('/api/admin/product/add-product/details', formData);
+
+            setLoading(false);
+
+            console.log(response.data._id)
+
+            dispatch(setProductID(response.data._id));
+            router.push("description");
+
+        } catch(err){
+            setLoading(false);
+
+            if(isAxiosError(err)){
+
+                const errInResponse = err.response.data;
+
+                if(errInResponse?.type == "form-error"){
+                    setFormErrors(errInResponse.err)
+                } 
+                else {
+                    toast.error(errInResponse.err, toastStyle);
+                    console.error(errInResponse.err);
+                }
+                return;
+            }
+
+            toast.error(err, toastStyle);
+            console.error(err);
+            return;
+        }
+
     }
 
     const preventArrowKeysFronFunction = (e) => {
@@ -71,12 +135,18 @@ const AddProductDetailsForm = () => {
 
     const updateProductColor = (colorName, updatingOnBlur = false) => {
 
-        if(!colorName.length || !colorName) { return }; 
+        if(!colorName.length || !colorName) { return };
+        
+        setFormErrors(prev => {
+            return { ...prev, color: "" }
+        })
 
         // handle color update
         
         if(!productColors.includes(colorName) && updatingOnBlur){
-            console.log('no such color ', colorName)
+            setFormErrors(prev => {
+                return { ...prev, color: "Please choose the suitable color from the options" }
+            })
         } else {
             dispatch(setProductColor(colorName));
             colorFieldRef.current.value = colorName;
@@ -85,6 +155,8 @@ const AddProductDetailsForm = () => {
     }
 
     const handleProductColorInputKeyDown = (e) => {
+
+        if(!localColorArray){return}
 
         switch (e.key){
 
@@ -133,11 +205,13 @@ const AddProductDetailsForm = () => {
     }
 
     return (
+        <>
+        { loading && <Loader /> }
         <div>
 
             <h1 className="capitalize text-lg font-semibold">Product details</h1>
 
-            <form onSubmit={handleSubmit} className="mt-10 flex flex-col gap-4">
+            <form ref={formRef} onSubmit={handleSubmit} className="mt-10 flex flex-col gap-4">
 
                 <div>
 
@@ -148,6 +222,7 @@ const AddProductDetailsForm = () => {
                         type="text" 
                         name="brand" 
                         placeholder="Product Brand" 
+                        displayError={formErrors.brand}
                     />
 
                     <span className="-mt-1 block text-sm text-right text-black-100/50">{brand.length}/{maxBrandLength} characters left</span>
@@ -163,6 +238,7 @@ const AddProductDetailsForm = () => {
                         type="text" 
                         name="title" 
                         placeholder="Product Title" 
+                        displayError={formErrors.title}
                     />
 
                     <span className="-mt-1 block text-sm text-right text-black-100/50">{title.length}/{maxTitleLength} characters left</span>
@@ -172,7 +248,7 @@ const AddProductDetailsForm = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
 
                     <div className="flex max-xl:col-span-2">
-                        <div className="input-box-side-icon-parent">
+                        <div className={"input-box-side-icon-parent " + (formErrors.stock?.length ? "!border-red-200" : "")}>
                             <FontAwesomeIcon icon={faBoxesStacked} />
                         </div>
                         <InputField 
@@ -183,11 +259,13 @@ const AddProductDetailsForm = () => {
                             onChange={(e) => dispatch(setProductStock(e.target.value))} 
                             inputClasses="rounded-tl-none rounded-bl-none"
                             onKeyDown={preventArrowKeysFronFunction}
+                            displayError={formErrors.stock}
+                            errorStyles="-ml-[50px] w-[calc(100%+50px)]"
                         />
                     </div>
 
                     <div className="flex">
-                        <div className="input-box-side-icon-parent">
+                        <div className={"input-box-side-icon-parent " + (formErrors.sellingPrice?.length ? "!border-red-200" : "")}>
                             <FontAwesomeIcon icon={faTags} />
                         </div>
                         <InputField 
@@ -198,11 +276,13 @@ const AddProductDetailsForm = () => {
                             onChange={(e) => dispatch(setProductSellingPrice(e.target.value))} 
                             inputClasses="rounded-tl-none rounded-bl-none"
                             onKeyDown={preventArrowKeysFronFunction}
+                            displayError={formErrors.sellingPrice}
+                            errorStyles="-ml-[50px] w-[calc(100%+50px)]"
                         />
                     </div>
 
                     <div className="flex">
-                        <div className="input-box-side-icon-parent">
+                        <div className={"input-box-side-icon-parent " + (formErrors.actualPrice?.length ? "!border-red-200" : "")}>
                             <FontAwesomeIcon icon={faDollar} />
                         </div>
                         <InputField 
@@ -213,17 +293,21 @@ const AddProductDetailsForm = () => {
                             onChange={(e) => dispatch(setProductActualPrice(e.target.value))} 
                             inputClasses="rounded-tl-none rounded-bl-none"
                             onKeyDown={preventArrowKeysFronFunction}
+                            displayError={formErrors.actualPrice}
+                            errorStyles="-ml-[50px] w-[calc(100%+50px)]"
                         />
                     </div>
 
                 </div>
 
                 <SelectInput
-                        name="category"
-                        value={category}
-                        options={productCategories}
-                        placeholder="Category"
-                    />
+                    name="category"
+                    value={category}
+                    options={productCategories}
+                    placeholder="Category"
+                    displayError={formErrors.category}
+                    onChange={(e) => dispatch(setProductCategory(e.target.value))}
+                />
 
                 {/* colors input */}
                 <div className="relative">
@@ -231,6 +315,7 @@ const AddProductDetailsForm = () => {
                         refVal={colorFieldRef}
                         type="text"
                         name="color"
+                        displayError={formErrors.color}
                         value={color}
                         placeholder="Product Color"
                         onKeyDown={handleProductColorInputKeyDown}
@@ -241,7 +326,7 @@ const AddProductDetailsForm = () => {
 
                     {
                         (localColorArray != null && colorFieldFocused) &&
-                        <div className="bg-white-100 border border-white-200/50 absolute z-30 top-full left-0 w-full flex flex-col -mt-2 border-t-0 rounded-b-md shadow-[0px_7px_10px_rgba(0,0,0,0.075)]">
+                        <div className={"bg-white-100 border border-white-200/50 absolute z-30 top-full left-0 w-full flex flex-col -mt-2 border-t-0 rounded-b-md shadow-[0px_7px_10px_rgba(0,0,0,0.075)] " + (formErrors.color?.length ? " -mt-10 " : "")}>
                             {
                                 localColorArray.length ? 
                                 localColorArray.map((colorName, i) => {
@@ -269,6 +354,7 @@ const AddProductDetailsForm = () => {
                         placeholder="Searching Tags"
                         onKeyDown={handleTagInputKeyDown}
                         inputClasses={ tags.length ? "rounded-b-none" : "" }
+                        displayError={formErrors.tags}
                     />
                     {
                         tags.length > 0 &&
@@ -306,7 +392,8 @@ const AddProductDetailsForm = () => {
 
             </form>
 
-        </div>
+            </div>
+        </>
     )
 }
 

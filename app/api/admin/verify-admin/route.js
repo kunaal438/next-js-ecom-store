@@ -8,6 +8,6 @@ export const POST = async (req) => {
         return user;
     }
 
-    return new Response(JSON.stringify({ isAdmin: user.admin }))
+    return new Response(JSON.stringify({ isAdmin: true }))
 
 }

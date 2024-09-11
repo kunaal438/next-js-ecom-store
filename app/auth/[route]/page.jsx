@@ -10,13 +10,13 @@ import Link from "next/link";
 import { useRef, useEffect, useState } from "react";
 import ExtractFormData from "@/utils/ExtractFormData.utils";
 import Loader from "@/components/Loader.component";
-import { emailRegex, passwordRegex } from "@/utils/regex";
 import axios, { isAxiosError } from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "@/reducer/user.redux";
 import signInWithGoogle from "@/utils/signInWithGoogle";
 import toast from "react-hot-toast";
 import { toastStyle } from "@/utils/toastStyles";
+import validateAuthenticationData from "@/utils/form-validations/authentication-detaila";
  
 const AuthPage = ({ params }) => {
 
@@ -47,35 +47,6 @@ const AuthPage = ({ params }) => {
 
     }, [isUserAuthenticated])
 
-    const formValidation = (formData) => {
-        
-        let isValid = true;
-        const errors = {};
-
-        const { fullname, email, password } = formData;
-
-        if(fullname != undefined && !fullname.length){
-            errors.fullname = "Fullname is required"
-            isValid = false;
-        }
-
-        if(!email.length){
-            errors.email = "Email is required"
-            isValid = false;
-        } else if(!emailRegex.test(email)){
-            errors.email = "Email is invalid. Please provide a valid email"
-            isValid = false;
-        }
-
-        if(!passwordRegex.test(password)){
-            errors.password = "Password should contain 1 uppercase letter, 1 number and should be at least 8 characters long"
-            isValid = false;
-        }
-        
-        setFormErrors(errors);
-
-        return isValid;        
-    }
 
     const continueWithGoogle = async () => {
 
@@ -134,9 +105,12 @@ const AuthPage = ({ params }) => {
         if(!formRef.current){return}
 
         const formData = ExtractFormData(formRef.current);
-        const formValid = formValidation(formData);
+        const formValid = validateAuthenticationData(formData);
         
-        if(!formValid) { return }
+        if(!formValid.isValid) {
+            setFormErrors(formValid.error);
+            return;
+        }
 
         setLoading(true);
 
@@ -155,9 +129,7 @@ const AuthPage = ({ params }) => {
                 const errInResponse = err.response.data;
 
                 if(errInResponse?.type == "form-error"){
-                    setFormErrors({
-                        [errInResponse.field]: errInResponse.err
-                    })
+                    setFormErrors(errInResponse.err)
                 } 
                 else {
                     toast.error(errInResponse.err, toastStyle);

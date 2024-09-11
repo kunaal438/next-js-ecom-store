@@ -1,7 +1,7 @@
 import User from "@/schema/User.schema";
-import validateAuthForm from "@/utils/backend/AuthFormValidation.utils";
 import connectDB from "@/utils/backend/connectMongoDB";
 import setAccessTokenCookie from "@/utils/backend/SetAccessTokenCookie.utils";
+import validateAuthenticationData from "@/utils/form-validations/authentication-detaila";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
 
@@ -11,19 +11,13 @@ export const POST = async (req) => {
 
     const { fullname, email, password } = formData;
 
-    const form = validateAuthForm(formData);
+    const form = validateAuthenticationData(formData);
 
-    if(!form.valid) { 
-
-        return new Response(
-                JSON.stringify({ 
-                err: form.error,
-                type: "form-error",
-                field: form.field
-            }),
-            { status: 403 }
-        )
-
+    if(!form.isValid){
+        return new Response(JSON.stringify({
+            err: form.error,
+            type: "form-error"
+        }), { status: 403 })
     }
 
     try {
@@ -35,9 +29,8 @@ export const POST = async (req) => {
         if(userExists){
             
             return new Response(JSON.stringify({
-                err: 'Email is already in use, please use different email', 
-                type: "form-error", 
-                field: "email" 
+                err: { email: 'Email is already in use, please use different email'}, 
+                type: "form-error",
             }), { status: 409 })
 
         }
