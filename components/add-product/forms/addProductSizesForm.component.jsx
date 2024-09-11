@@ -54,32 +54,6 @@ const AddProductSizesForm = () => {
 
             const { name } = sizes[i];
 
-            if(name == sizeInfo.info.name){ 
-                toast.error(`"${name}" size already exists.`, toastStyle);
-                return;
-            }
-
-        }
-
-        dispatch(addProductSize(sizeInfo.info));
-        clearLocalData();
-
-    }
-
-    const updateSizeInfo = () => {        
-        
-        const formData = { name: size, des: sizeDes, stock: sizeStock };
-        const sizeInfo = validateProductSizes(formData);
-
-        if(!sizeInfo.isValid){
-            setErrors(sizeInfo.errors);
-            return;
-        }
-
-        for(let i = 0; i < sizes.length; i++){
-
-            const { name } = sizes[i];
-
             if(name == sizeInfo.info.name && i != editingSize){ 
                 toast.error(`"${name}" size already exists.`, toastStyle);
                 return;
@@ -87,41 +61,28 @@ const AddProductSizesForm = () => {
 
         }
 
-        dispatch(updateProductSize({ index: editingSize, size: sizeInfo.info }));
-        clearLocalData();
+        dispatch(editingSize == null 
+            ? addProductSize(sizeInfo.info) 
+            : updateProductSize({ index: editingSize, size: sizeInfo.info })
+        );
+
+        modifySizeTextFields();
 
     }
 
-    const clearLocalData = () => {
-
-        // reset input values
-        sizeRef.current.value = "";
-        sizeDesRef.current.value = "";
-        sizeStockRef.current.value = "";
-
-        // reset the states
-        setSize("");
-        setSizeDes("");
-        setSizeStock("");
+    const modifySizeTextFields = (i = null) => {
+        const sizeData = i !== null ? sizes[i] : { name: "", des: "", stock: "" };
+    
+        sizeRef.current.value = sizeData.name;
+        sizeDesRef.current.value = sizeData.des;
+        sizeStockRef.current.value = sizeData.stock;
+    
+        setSize(sizeData.name);
+        setSizeDes(sizeData.des);
+        setSizeStock(sizeData.stock);
         setErrors({});
-        setEditingSize(null);
-
-    }
-
-    const editSize = (i) => {
-
-        const { name, des, stock } = sizes[i];
-
-        sizeRef.current.value = name;
-        sizeDesRef.current.value = des;
-        sizeStockRef.current.value = stock;
-
-        setSize(name);
-        setSizeDes(des);
-        setSizeStock(stock);
         setEditingSize(i);
-
-    }
+    };
 
     const handleSubmit = async () => {
         
@@ -242,17 +203,14 @@ const AddProductSizesForm = () => {
                     onChange={(e) => setSizeStock(e.target.value)}
                 />
 
-                {
-                    editingSize == null ?
-                    <button onClick={addSize} className={"py-3 px-7 pl-5 bg-white-200/50 rounded-md w-fit flex items-center gap-3"}>
-                            <FontAwesomeIcon icon={faPlus} className="scale-75 mt-0.5" />
-                        Add Size
-                    </button>
-                    : 
-                    <button onClick={updateSizeInfo} className={"py-3 px-7 bg-white-200/50 rounded-md w-fit flex items-center gap-3"}>
-                       Save
-                    </button>
-                }
+
+                <button onClick={addSize} className={"py-3 px-7 " + (editingSize == null ? "pl-5" : "") + " bg-white-200/50 rounded-md w-fit flex items-center gap-3"}>
+                    {
+                        editingSize == null && 
+                        <FontAwesomeIcon icon={faPlus} className="scale-75 mt-0.5" />
+                    }
+                    { editingSize == null ? "Add Size" : "Save" }                        
+                </button>
 
             </div>
 
@@ -297,7 +255,7 @@ const AddProductSizesForm = () => {
                                             </button>
                                         }
 
-                                        <button className="small_btn" onClick={() => editSize(i)}>
+                                        <button className="small_btn" onClick={() => modifySizeTextFields(i)}>
                                             <FontAwesomeIcon icon={faPen} className="scale-75" />
                                         </button>
 

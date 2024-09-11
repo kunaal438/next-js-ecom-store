@@ -16,7 +16,7 @@ export const POST = async (req) => {
     const { id, sizes } = formData;
 
     if(!id){
-        return new Response(JSON.stringify({ err: "No Product ID Provided" }), { status: 403 });
+        return new Response(JSON.stringify({ err: "No Product ID" }), { status: 403 });
     }
 
     for(let i = 0; i < sizes.length; i++){

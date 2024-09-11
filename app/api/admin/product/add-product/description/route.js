@@ -16,7 +16,7 @@ export const POST = async (req) => {
     const { id, description, materialCare } = formData;
 
     if(!id){
-        return new Response(JSON.stringify({ err: "No Product ID Provided" }), { status: 403 });
+        return new Response(JSON.stringify({ err: "No Product ID" }), { status: 403 });
     }
 
     const formValid = validateProductDescriptionForm(formData);
