@@ -1,8 +1,6 @@
-'use client';
-
 import { useState } from "react";
 
-const InputField = ({ refVal, type, disable, placeholder, name, displayError, max, onChange, value, inputClasses, onKeyDown, onFocus, onBlur, errorStyles }) => {
+const TextArea = ({ refVal, placeholder, name, displayError, max, onChange, value, inputClasses, onKeyDown, onBlur, errorStyles, height }) => {
 
     const [inputFocused, setInputFocus] = useState(value?.length ? true : false);
     
@@ -16,33 +14,42 @@ const InputField = ({ refVal, type, disable, placeholder, name, displayError, ma
         }
     }
 
-    const handleFocus = () => {
-        addFocus();
-        onFocus && onFocus();
-    }
-
     const handleBlur = (e) => {
         removeFocus(e);
         onBlur && onBlur();
+    }
+
+    const handleChange = (e) => {
+
+        const textarea = e.target;
+        const rows = Number(textarea.getAttribute("rows"));
+        const clientHeight = textarea.clientHeight;
+        const scrollHeight = textarea.scrollHeight;
+
+        if(scrollHeight > clientHeight){
+            textarea.setAttribute("rows", rows + 1);
+        }
+
+        onChange && onChange(e);
     }
 
     return (
         <div className="w-full">
             <div className="relative">
                 
-                <input 
+                <textarea 
                     ref={refVal}
-                    disabled={disable}
-                    onChange={onChange}
+                    onChange={handleChange}
                     onKeyDown={onKeyDown}
                     defaultValue={value}
                     maxLength={max}
-                    className={"w-full h-[50px] rounded-md border px-4 py-3 pt-4 bg-white-100 mb-2 " + inputClasses + (displayError ? " border-red-200  " : " border-white-200 ")} 
-                    onFocus={handleFocus} 
+                    className={" resize-none w-full rounded-md border px-4 py-3 pt-4 bg-white-100 mb-2 " + inputClasses + (displayError ? " border-red-200  " : " border-white-200 ")} 
+                    onFocus={addFocus} 
                     onBlur={handleBlur} 
-                    type={type} 
                     name={name} 
-                />
+                    rows={height || 4}
+                >
+                </textarea>
                 <p className={" pointer-events-none duration-500 absolute px-3 bg-white-100 left-1 " + ( inputFocused ? " -top-2.5 text-sm text-black-300 " : "top-3 text-black-100" ) }>{placeholder}</p>
                 
                 {
@@ -57,4 +64,4 @@ const InputField = ({ refVal, type, disable, placeholder, name, displayError, ma
     )
 }
 
-export default InputField;
+export default TextArea;

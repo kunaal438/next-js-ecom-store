@@ -1,7 +1,20 @@
 import Product from "@/schema/Product.schema";
 import validAdminRequest from "@/utils/backend/adminVerification.utils";
 import connectDB from "@/utils/backend/connectMongoDB";
-import validateProductDetailsForm from "@/utils/form-validations/product-details";
+import validateProductDetailsForm from "@/utils/form-validations/product-validations/product-details";
+import generateDocID from "@/utils/generateDocID";
+
+const generateProductDocID = async (title) => {
+    let product_id = generateDocID(title);
+
+    const productExists = await Product.findOne({ product_id });
+
+    if(productExists){
+        generateProductDocID();
+    }
+
+    return product_id;
+}
 
 export const POST = async (req) => {
 
@@ -29,13 +42,15 @@ export const POST = async (req) => {
 
         await connectDB();
 
+        let product_id = await generateProductDocID(title);
+
         const product = new Product({
-            title, brand, color, category, tags, stock, price: { sellingPrice, actualPrice }
+            product_id, title, brand, color, category, tags, stock, price: { sellingPrice, actualPrice }
         });
 
-        const savedProduct = await product.save();
+        await product.save();
 
-        return new Response(JSON.stringify({ _id: savedProduct._id }), { status: 200 })
+        return new Response(JSON.stringify({ id: product_id }), { status: 200 })
 
     } catch(err){
         console.error(err);

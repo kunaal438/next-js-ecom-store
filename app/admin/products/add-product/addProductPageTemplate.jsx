@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 const AddProductPageTemplate = ({ children }) => {
 
@@ -12,6 +13,22 @@ const AddProductPageTemplate = ({ children }) => {
     const pathname = usePathname();
 
     const formSteps = ["details", "description", "sizes", "images"];
+
+    const handleBeforeUnload = (event) => {
+        const message = "You have unsaved changes. Are you sure you want to leave?";
+        event.returnValue = message;
+        return message;
+    };
+
+    useEffect(() => {
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+          window.removeEventListener('beforeunload', handleBeforeUnload);
+        }
+        
+    }, [])
 
     return (
         <div className="relative flex w-full min-h-[100vh]">

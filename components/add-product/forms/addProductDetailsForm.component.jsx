@@ -1,7 +1,7 @@
 'use client'
 
-import InputField from "@/components/Input.component";
-import SelectInput from "@/components/SelectInput.component";
+import InputField from "@/components/inputs/Input.component";
+import SelectInput from "@/components/inputs/SelectInput.component";
 import { setProductActualPrice, setProductSellingPrice, setProductTitle, setProductStock, setProductBrand, addProductTags, removeProductTags, setProductColor, setProductCategory, setProductID } from "@/reducer/product.redux";
 import { productCategories, productColors } from "@/utils/productDetails";
 import { faBoxesStacked, faChevronLeft, faDollar, faTags, faX } from "@fortawesome/free-solid-svg-icons";
@@ -11,7 +11,7 @@ import { useState, useRef } from "react";
 import Link from "next/link";
 import Loader from "@/components/Loader.component";
 import ExtractFormData from "@/utils/ExtractFormData.utils";
-import validateProductDetailsForm from "@/utils/form-validations/product-details";
+import validateProductDetailsForm from "@/utils/form-validations/product-validations/product-details";
 import axios, { isAxiosError } from "axios";
 import toast from "react-hot-toast";
 import { toastStyle } from "@/utils/toastStyles";
@@ -67,9 +67,7 @@ const AddProductDetailsForm = () => {
 
             setLoading(false);
 
-            console.log(response.data._id)
-
-            dispatch(setProductID(response.data._id));
+            dispatch(setProductID(response.data.id));
             router.push("description");
 
         } catch(err){
@@ -94,12 +92,6 @@ const AddProductDetailsForm = () => {
             return;
         }
 
-    }
-
-    const preventArrowKeysFronFunction = (e) => {
-        if(e.key == "ArrowUp" || e.key == "ArrowDown"){
-            e.preventDefault();
-        }
     }
 
     const handleTagInputKeyDown = (e) => {
@@ -258,7 +250,6 @@ const AddProductDetailsForm = () => {
                             value={stock} 
                             onChange={(e) => dispatch(setProductStock(e.target.value))} 
                             inputClasses="rounded-tl-none rounded-bl-none"
-                            onKeyDown={preventArrowKeysFronFunction}
                             displayError={formErrors.stock}
                             errorStyles="-ml-[50px] w-[calc(100%+50px)]"
                         />
@@ -275,7 +266,6 @@ const AddProductDetailsForm = () => {
                             value={sellingPrice} 
                             onChange={(e) => dispatch(setProductSellingPrice(e.target.value))} 
                             inputClasses="rounded-tl-none rounded-bl-none"
-                            onKeyDown={preventArrowKeysFronFunction}
                             displayError={formErrors.sellingPrice}
                             errorStyles="-ml-[50px] w-[calc(100%+50px)]"
                         />
@@ -292,7 +282,6 @@ const AddProductDetailsForm = () => {
                             value={actualPrice} 
                             onChange={(e) => dispatch(setProductActualPrice(e.target.value))} 
                             inputClasses="rounded-tl-none rounded-bl-none"
-                            onKeyDown={preventArrowKeysFronFunction}
                             displayError={formErrors.actualPrice}
                             errorStyles="-ml-[50px] w-[calc(100%+50px)]"
                         />

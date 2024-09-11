@@ -1,9 +1,12 @@
 import { productCategories, productColors } from "@/utils/productDetails.js";
-import { emailRegex, passwordRegex } from "../utils/regex.js";
 import { Schema, model, models } from "mongoose";
 
 const ProductSchema = new Schema({
-    
+
+    product_id: {
+        type: String,
+        required: [true, "Can't create product without it's id"]
+    },
     title: {
         type: String,
         required: [true, "Need product title to proceed"],
@@ -51,6 +54,10 @@ const ProductSchema = new Schema({
               v.length > 0 ? true : "Need at least 1 tag to add the product"
             }
         },
+    },
+    details: {
+        description: String,
+        materialCare: String
     }
 
 })

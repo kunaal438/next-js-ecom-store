@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import AddProductPageTemplate from "../addProductPageTemplate";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import AddProductDescriptionForm from "@/components/add-product/forms/addProductDescriptionForm.component";
+import AddProductDescriptionOutput from "@/components/add-product/output/addProductDescriptionOutput.component";
 
 const AddProductDescriptionPage = () => {
 
@@ -12,16 +14,16 @@ const AddProductDescriptionPage = () => {
 
     useEffect(() => {
 
-        if(!id){
-            router.push('details');
-        }
+        // if(!id){
+        //     router.push('details');
+        // }
 
     }, [id])
 
     return (
         <AddProductPageTemplate>
-            <h1>Description Form</h1>
-            <h1>Preview</h1>
+            <AddProductDescriptionForm />
+            <AddProductDescriptionOutput />
         </AddProductPageTemplate>
     )
 }

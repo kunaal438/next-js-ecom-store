@@ -20,6 +20,10 @@
   @apply h-[50px] aspect-square bg-white-200/20 border border-r-0 border-white-200 rounded-tl-md rounded-bl-md flex items-center justify-center;
 }
 
+.small_btn{
+  @apply w-6 h-6 flex items-center justify-center rounded-full border border-white-300;
+}
+
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;

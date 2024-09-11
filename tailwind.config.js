@@ -39,6 +39,9 @@ module.exports = {
           fontFamily: {
               assistant: ['"Assistant"', "sans-serif"],
           },
+          lineClamp: {
+              '10': '10',
+          }
       },
   },
   plugins: [],

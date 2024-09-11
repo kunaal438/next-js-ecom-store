@@ -1,4 +1,4 @@
-import { productCategories, productColors } from "../productDetails";
+import { productCategories, productColors } from "../../productDetails";
 
 const validateProductDetailsForm = (formData) => {
 
