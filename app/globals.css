@@ -21,7 +21,7 @@
 }
 
 .small_btn{
-  @apply w-6 h-6 flex items-center justify-center rounded-full border border-white-300;
+  @apply w-6 h-6 flex items-center justify-center rounded-full border border-white-300 bg-white-100;
 }
 
 input[type="number"]::-webkit-inner-spin-button,

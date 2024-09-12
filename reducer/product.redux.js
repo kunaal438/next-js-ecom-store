@@ -1,3 +1,4 @@
+import { reArrageArrayOrder } from "@/utils/sortingArray";
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
@@ -16,7 +17,8 @@ const initialState = {
         description: "",
         materialCare: ""
     },
-    sizes: []
+    sizes: [],
+    images: [],
 }
 
 const productSlice = createSlice({
@@ -99,54 +101,42 @@ const productSlice = createSlice({
             return { ...state, sizes: newSizeArray}
         },
 
-        rearrageProductSizeOrder: (state, action) => {
+        reArrageProductSizeOrder: (state, action) => {
             const { index, type } = action.payload;
 
-            let tempSizesArray = [...state.sizes];
+            const newSizesArray = reArrageArrayOrder({ index, type, array: state.sizes })
 
-            switch (type) {
-                case 'up': {
+            return { ...state, sizes: newSizesArray }
 
-                    let leftArray = [...tempSizesArray];
-                    let rightArray = leftArray.splice(index);
-                    let valueToShift = rightArray.shift();
+        },
+        
+        addProductImage: (state, action) => {
 
-                    if(rightArray[0]){
-                        leftArray.push(rightArray[0]);
-                        rightArray[0] = valueToShift;
-                        tempSizesArray = [...leftArray, ...rightArray];
-                    }
+            return { ...state, images: [...state.images, action.payload] }
 
-                    break;
+        },
 
-                }
-                case 'down': {
-                    
-                    let leftArray = [...tempSizesArray];
-                    let rightArray = leftArray.splice(index);
-                    let valueToShift = rightArray.shift();
+        removeProductImage: (state, action) => {
 
-                    if(leftArray[0]){
-                        rightArray.unshift(leftArray[leftArray.length-1]);
-                        leftArray.pop();
-                        leftArray.push(valueToShift);
-                        tempSizesArray = [...leftArray, ...rightArray];
-                    }
+            let newImagesArray = [...state.images];
+            newImagesArray = state.images.filter((_, i) => i != action.payload);
 
-                    break;
+            return { ...state, images: newImagesArray}
 
-                }
-                default:
-                    break;
-            }
+        },
 
-            return { ...state, sizes: tempSizesArray }
+        reArrageProductImageOrder: (state, action) => {
+            const { index, type } = action.payload;
+
+            const newImagesArray = reArrageArrayOrder({ index, type, array: state.images })
+
+            return { ...state, images: newImagesArray }
 
         }
 
     }
 });
 
-export const { setProductID, setProductTitle, setProductBrand, setProductStock, setProductSellingPrice, setProductActualPrice, setProductCategory, setProductColor, addProductTags, removeProductTags, setProductDescription, setProductMaterialCare, addProductSize, updateProductSize, removeProductSize, rearrageProductSizeOrder } = productSlice.actions;
+export const { setProductID, setProductTitle, setProductBrand, setProductStock, setProductSellingPrice, setProductActualPrice, setProductCategory, setProductColor, addProductTags, removeProductTags, setProductDescription, setProductMaterialCare, addProductSize, updateProductSize, removeProductSize, reArrageProductSizeOrder, addProductImage, removeProductImage, reArrageProductImageOrder } = productSlice.actions;
 
 export default productSlice.reducer

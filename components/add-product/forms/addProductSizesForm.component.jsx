@@ -2,7 +2,7 @@
 import InputField from "@/components/inputs/Input.component";
 import TextArea from "@/components/inputs/TextArea.component";
 import Loader from "@/components/Loader.component";
-import { addProductSize, rearrageProductSizeOrder, removeProductSize, updateProductSize } from "@/reducer/product.redux";
+import { addProductSize, reArrageProductSizeOrder, rearrageProductSizeOrder, removeProductSize, updateProductSize } from "@/reducer/product.redux";
 import validateProductSizes from "@/utils/form-validations/product-validations/product-sizes";
 import { toastStyle } from "@/utils/toastStyles";
 import { faChevronLeft, faChevronRight, faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -13,6 +13,7 @@ import { useState, useRef } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
+import DeleteConfirmation from "@/components/deleteConfirmationDialogueBox.component";
 
 const AddProductSizesForm = () => {
 
@@ -142,28 +143,19 @@ const AddProductSizesForm = () => {
 
         {
             deleteSize != null &&
-            <div className="z-50 fixed top-0 left-0 w-full h-screen bg-black-100/10 flex items-center justify-center">
-                <div className="min-w-[300px] p-7 rounded-xl px-8 relative bg-white-100 border border-white-300">
-                    <h1 className="font-bold text-lg mb-2">Are you sure ??</h1>
-
-                    <p className="my-3">Do you want to delete : </p>
-                    <div className="p-3 bg-white-200/50 flex flex-col gap-2">
-                        <p>Size - "{sizes[deleteSize].name}"</p>
-                        <pre className="line-clamp-2 font-assistant">Description - "{sizes[deleteSize].des}"</pre>
-                        <p>Stock - "{sizes[deleteSize].stock}"</p>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3 mt-5">
-                        <button className="primary_btn !rounded-md !bg-white-200 !text-black-300" onClick={() => setDeleteSize(null)}>Cancel</button>
-                        <button className="primary_btn !rounded-md !bg-red-300 !text-white-100" 
-                            onClick={() => {
-                                dispatch(removeProductSize(deleteSize));
-                                setDeleteSize(null);
-                            }}
-                        >Yes, Delete it</button>
-                    </div>
+            <DeleteConfirmation
+                cancelFunc={() => setDeleteSize(null)}
+                deleteFunc={() => {
+                    dispatch(removeProductSize(deleteSize));
+                    setDeleteSize(null);
+                }}
+            >
+                <div className="flex flex-col gap-2">
+                    <p>Size - "{sizes[deleteSize].name}"</p>
+                    <pre className="line-clamp-2 font-assistant">Description - "{sizes[deleteSize].des}"</pre>
+                    <p>Stock - "{sizes[deleteSize].stock}"</p>
                 </div>
-            </div>
+            </DeleteConfirmation>
         }
 
         <div>
@@ -250,7 +242,7 @@ const AddProductSizesForm = () => {
 
                                         {
                                             (i != 0) && 
-                                            <button className="small_btn" onClick={() => dispatch(rearrageProductSizeOrder({ index: i, type: "down" }))}>
+                                            <button className="small_btn" onClick={() => dispatch(reArrageProductSizeOrder({ index: i, type: "down" }))}>
                                                 <FontAwesomeIcon icon={faChevronLeft} className="scale-75" />
                                             </button>
                                         }
@@ -265,7 +257,7 @@ const AddProductSizesForm = () => {
 
                                         {
                                             (i != sizes.length - 1) &&
-                                            <button className="small_btn" onClick={() => dispatch(rearrageProductSizeOrder({ index: i, type: "up" }))}>
+                                            <button className="small_btn" onClick={() => dispatch(reArrageProductSizeOrder({ index: i, type: "up" }))}>
                                                 <FontAwesomeIcon icon={faChevronRight} className="scale-75" />
                                             </button>
                                         }

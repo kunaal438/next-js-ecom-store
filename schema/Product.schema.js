@@ -67,7 +67,8 @@ const ProductSchema = new Schema({
                 stock: Number,
             }
         ]
-    }
+    },
+    images: [String]
 
 })
 

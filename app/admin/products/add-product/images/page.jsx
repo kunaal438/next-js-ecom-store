@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import AddProductPageTemplate from "../addProductPageTemplate";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import AddProductImagesForm from "@/components/add-product/forms/addProductImagesForm.component";
+import AddProductImagesOutput from "@/components/add-product/output/addProductImagesOutput.component";
 
 const AddProductImagesPage = () => {
 
@@ -20,8 +22,8 @@ const AddProductImagesPage = () => {
 
     return (
         <AddProductPageTemplate>
-            <h1>Image form</h1>
-            <h1>Image preview</h1>
+            <AddProductImagesForm />
+            <AddProductImagesOutput />
         </AddProductPageTemplate>
     )
 }
