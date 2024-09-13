@@ -3,6 +3,7 @@ import AddProductDetailsOutput from "@/components/add-product/output/addProductD
 import AddProductPageTemplate from "../addProductPageTemplate";
 
 const AddProductDetailsPage = () => {
+
     return (
         <AddProductPageTemplate>
             <AddProductDetailsForm />

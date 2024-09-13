@@ -1,6 +1,6 @@
 import TextArea from "@/components/inputs/TextArea.component";
 import Loader from "@/components/Loader.component";
-import { setProductDescription, setProductMaterialCare } from "@/reducer/product.redux";
+import { forwardForm, setProductDescription, setProductMaterialCare } from "@/reducer/product.redux";
 import ExtractFormData from "@/utils/ExtractFormData.utils";
 import validateProductDescriptionForm from "@/utils/form-validations/product-validations/product-description";
 import { toastStyle } from "@/utils/toastStyles";
@@ -30,18 +30,13 @@ const AddProductDescriptionForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if(!formRef.current) { return }
+        if(!formRef.current || !id) { return }
 
         const formData = ExtractFormData(formRef.current);
         const formValid = validateProductDescriptionForm(formData);
 
         if(!formValid.isValid){
             setFormErrors(formValid.error);
-            return;
-        }
-
-        if(!id){
-            toast.error("Product ID is not available", toastStyle);
             return;
         }
 
@@ -52,6 +47,7 @@ const AddProductDescriptionForm = () => {
             await axios.post('/api/admin/product/add-product/description', { ...formData, id });
 
             setLoading(false);
+            dispatch(forwardForm())
             router.push("sizes")
 
         } catch(err){

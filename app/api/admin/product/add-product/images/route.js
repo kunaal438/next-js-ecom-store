@@ -24,7 +24,9 @@ export const POST = async (req) => {
 
         await connectDB();
 
-        await Product.findOneAndUpdate({ product_id: id }, { images });
+        // get the images from database first and compare both arrays, if there is a url stored that is not present in the current data then delete that stored image from cloud.
+
+        await Product.findOneAndUpdate({ product_id: id }, { images, product_form_complete: 100 });
 
         return new Response(null, { status: 200 });
 

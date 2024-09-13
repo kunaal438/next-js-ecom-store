@@ -1,10 +1,12 @@
 'use client';
 
+import { resetProductReducer } from "@/reducer/product.redux";
 import { faMagnifyingGlass, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 const AdminProductsManagement = () => {
 
@@ -13,10 +15,15 @@ const AdminProductsManagement = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const queryObject = Object.fromEntries(searchParams.entries());
+    const dispatch = useDispatch();
 
     const filterOptions = ["all", "men", "women", "accessories", "draft products", "archived products"];
 
     const [activeFilter, setActiveFilter] = useState(searchParams.get("filter") || filterOptions[0]);
+
+    useEffect(() => {
+        dispatch(resetProductReducer());
+    }, [])
 
     const redirectForSearch = (searchKey) => {
 

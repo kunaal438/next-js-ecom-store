@@ -56,8 +56,14 @@ const ProductSchema = new Schema({
         },
     },
     details: {
-        description: String,
-        materialCare: String
+        description: {
+            type: String,
+            default: ""
+        },
+        materialCare: {
+            type: String,
+            default: ""
+        }
     },
     sizes: {
         type: [
@@ -68,7 +74,11 @@ const ProductSchema = new Schema({
             }
         ]
     },
-    images: [String]
+    images: [String],
+    product_form_complete: {
+        type: Number,
+        required: [true, "Need to know how much form is complete"]
+    }
 
 })
 

@@ -79,7 +79,6 @@ const AddProductImagesForm = () => {
                 imagesURL.push(url);
 
             } catch(err){
-
                 setLoading(false);
                 console.error(err);
 
@@ -91,7 +90,13 @@ const AddProductImagesForm = () => {
 
         };
 
-        if(imagesURL.length != maxUploadImagesLimit){ return }
+        if(imagesURL.length != maxUploadImagesLimit){ 
+            // delete all the images stored in imagesURL only if they are not inside images reducer ( then only they will be recent ones )
+
+            setUploadingImage(0);
+            return 
+        }
+        setUploadingImage(prev => prev + 1)
 
         try {
 
@@ -103,6 +108,9 @@ const AddProductImagesForm = () => {
             router.push("/admin/products");
 
         } catch(err){
+
+            // delete all the images stored in imagesURL only if they are not inside images reducer ( then only they will be recent ones )
+
             setLoading(false);
             setUploadingImage(0);
 
@@ -135,7 +143,7 @@ const AddProductImagesForm = () => {
                 <div className="flex items-center gap-2 flex-col">
 
                     <Image className=" select-none" src="/assets/loading.svg" width={80} height={80} alt="loading animation" />
-                    <p>{ (uploadingImage == maxUploadImagesLimit - 1) ? "Saving Data.... Do not refresh the page" : `Uploading...... Image ${uploadingImage + 1}` }</p>
+                    <p>{ (uploadingImage > maxUploadImagesLimit - 1) ? "Saving Data.... Do not refresh the page" : `Uploading...... Image ${uploadingImage + 1}` }</p>
 
                 </div>
             </div>

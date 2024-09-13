@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 const SideNavbarWrapperLayout = () => {
 
-    const sideNavToBeHiddenOnPaths = ["/admin/products/add-product"];
+    const sideNavToBeHiddenOnPaths = ["/add-product"];
     const pathname = usePathname();
 
     const showSideNav = !sideNavToBeHiddenOnPaths.some(path => pathname.includes(path));

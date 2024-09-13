@@ -2,7 +2,7 @@
 
 import InputField from "@/components/inputs/Input.component";
 import SelectInput from "@/components/inputs/SelectInput.component";
-import { setProductActualPrice, setProductSellingPrice, setProductTitle, setProductStock, setProductBrand, addProductTags, removeProductTags, setProductColor, setProductCategory, setProductID } from "@/reducer/product.redux";
+import { setProductActualPrice, setProductSellingPrice, setProductTitle, setProductStock, setProductBrand, addProductTags, removeProductTags, setProductColor, setProductCategory, setProductID, forwardForm } from "@/reducer/product.redux";
 import { productCategories, productColors } from "@/utils/productDetails";
 import { faBoxesStacked, faChevronLeft, faDollar, faTags, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,7 +18,6 @@ import { toastStyle } from "@/utils/toastStyles";
 import { useRouter } from "next/navigation";
 
 const AddProductDetailsForm = () => {
-
     // loading state
     const [loading, setLoading] = useState(false);
 
@@ -32,10 +31,10 @@ const AddProductDetailsForm = () => {
     const [selectedColor, setSelectedColor] = useState(null); 
     const colorFieldRef = useRef();
 
-    const { brand, title, stock, price: { sellingPrice, actualPrice }, category, color, tags } = useSelector(state => state.product);
+    const { brand, title, stock, price: { sellingPrice, actualPrice }, category, color, tags, id } = useSelector(state => state.product);
 
     const dispatch = useDispatch();
-    const router = useRouter();
+    const router = useRouter()
 
     const maxBrandLength = 30;
     const maxTitleLength = 100;
@@ -63,11 +62,12 @@ const AddProductDetailsForm = () => {
 
         try {
 
-            const response = await axios.post('/api/admin/product/add-product/details', formData);
+            const response = await axios.post('/api/admin/product/add-product/details', { ...formData, id });
 
             setLoading(false);
 
             dispatch(setProductID(response.data.id));
+            dispatch(forwardForm())
             router.push("description");
 
         } catch(err){
@@ -381,7 +381,7 @@ const AddProductDetailsForm = () => {
 
             </form>
 
-            </div>
+        </div>
         </>
     )
 }

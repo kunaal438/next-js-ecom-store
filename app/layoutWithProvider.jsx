@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation";
 
 const LayoutWithProvider = ({ children }) => {
 
-    const navbarToBeHiddenOnPaths = ["/admin/products/add-product"];
+    const navbarToBeHiddenOnPaths = ["/add-product"];
     const pathname = usePathname();
 
     const showNavbar = !navbarToBeHiddenOnPaths.some(path => pathname.includes(path));

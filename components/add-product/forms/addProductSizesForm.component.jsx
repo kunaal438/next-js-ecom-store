@@ -2,7 +2,7 @@
 import InputField from "@/components/inputs/Input.component";
 import TextArea from "@/components/inputs/TextArea.component";
 import Loader from "@/components/Loader.component";
-import { addProductSize, reArrageProductSizeOrder, rearrageProductSizeOrder, removeProductSize, updateProductSize } from "@/reducer/product.redux";
+import { addProductSize, forwardForm, reArrageProductSizeOrder, rearrageProductSizeOrder, removeProductSize, updateProductSize } from "@/reducer/product.redux";
 import validateProductSizes from "@/utils/form-validations/product-validations/product-sizes";
 import { toastStyle } from "@/utils/toastStyles";
 import { faChevronLeft, faChevronRight, faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -87,7 +87,7 @@ const AddProductSizesForm = () => {
 
     const handleSubmit = async () => {
         
-        if(!sizes.length){
+        if(!sizes.length || !id){
             return;
         }
 
@@ -108,9 +108,10 @@ const AddProductSizesForm = () => {
 
         try {
 
-            await axios.post('/api/admin/product/add-product/sizes', { sizes });
+            await axios.post('/api/admin/product/add-product/sizes', { sizes, id });
 
             setLoading(false);
+            dispatch(forwardForm())
             router.push("images")
 
         } catch(err){

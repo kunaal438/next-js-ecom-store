@@ -19,6 +19,7 @@ const initialState = {
     },
     sizes: [],
     images: [],
+    product_form_complete: 0
 }
 
 const productSlice = createSlice({
@@ -28,6 +29,10 @@ const productSlice = createSlice({
 
         setProductID: (state, action) => {
             return { ...state, id: action.payload }
+        },
+
+        forwardForm: (state) => {
+            return { ...state, product_form_complete: state.product_form_complete + 25 }
         },
 
         setProductTitle: (state, action) => {
@@ -132,11 +137,19 @@ const productSlice = createSlice({
 
             return { ...state, images: newImagesArray }
 
+        },
+        
+        resetProductReducer: () => {
+            return initialState
+        },
+
+        setProductReducer: (state, action) => {
+            return action.payload;
         }
 
     }
 });
 
-export const { setProductID, setProductTitle, setProductBrand, setProductStock, setProductSellingPrice, setProductActualPrice, setProductCategory, setProductColor, addProductTags, removeProductTags, setProductDescription, setProductMaterialCare, addProductSize, updateProductSize, removeProductSize, reArrageProductSizeOrder, addProductImage, removeProductImage, reArrageProductImageOrder } = productSlice.actions;
+export const { setProductID, setProductTitle, setProductBrand, setProductStock, setProductSellingPrice, setProductActualPrice, setProductCategory, setProductColor, addProductTags, removeProductTags, setProductDescription, setProductMaterialCare, addProductSize, updateProductSize, removeProductSize, reArrageProductSizeOrder, addProductImage, removeProductImage, reArrageProductImageOrder, forwardForm, resetProductReducer, setProductReducer } = productSlice.actions;
 
 export default productSlice.reducer

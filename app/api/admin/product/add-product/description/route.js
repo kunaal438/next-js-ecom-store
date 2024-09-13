@@ -32,7 +32,7 @@ export const POST = async (req) => {
 
         await connectDB();
 
-        const product = await Product.findOneAndUpdate({ product_id: id }, { details: { description, materialCare } });
+        const product = await Product.findOneAndUpdate({ product_id: id }, { details: { description, materialCare }, product_form_complete: 50 });
 
         if(!product){
             return new Response(JSON.stringify({ err: "Product not found" }), { status: 404 });

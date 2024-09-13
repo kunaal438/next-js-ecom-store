@@ -26,7 +26,7 @@ export const POST = async (req) => {
  
     const formData = await req.json();
 
-    const { title, brand, color, category, tags, stock, sellingPrice, actualPrice } = formData;
+    const { title, brand, color, category, tags, stock, sellingPrice, actualPrice, id } = formData;
 
     // validate form
     const validForm = validateProductDetailsForm(formData);
@@ -42,11 +42,25 @@ export const POST = async (req) => {
 
         await connectDB();
 
-        let product_id = await generateProductDocID(title);
+        let productData = {
+            title, brand, color, category, tags, stock, price: { sellingPrice, actualPrice }
+        }
 
-        const product = new Product({
-            product_id, title, brand, color, category, tags, stock, price: { sellingPrice, actualPrice }
-        });
+        if(id){
+
+            await Product.findOneAndUpdate({ product_id: id }, productData);
+
+            return new Response(JSON.stringify({ id }), { status: 200 });
+        }
+
+        let product_id = await generateProductDocID(title);
+        
+        productData = {
+            ...productData,
+            product_id, product_form_complete: 25
+        }
+
+        const product = new Product(productData);
 
         await product.save();
 

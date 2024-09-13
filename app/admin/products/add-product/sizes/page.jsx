@@ -10,13 +10,16 @@ import AddProductSizesOutput from "@/components/add-product/output/addProductSiz
 const AddProductSizesPage = () => {
 
     const router = useRouter();
-    const { id } = useSelector(state => state.product);
+    const { id, product_form_complete } = useSelector(state => state.product);
 
     useEffect(() => {
 
-        // if(!id){
-        //     router.push('description');
-        // }
+        if(!id){
+            router.push('details');
+        }
+        else if(product_form_complete < 50){
+            router.push('description');
+        }
 
     }, [id])
 
