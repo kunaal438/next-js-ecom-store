@@ -10,14 +10,14 @@ import AddProductImagesOutput from "@/components/add-product/output/addProductIm
 const AddProductImagesPage = () => {
 
     const router = useRouter();
-    const { id, product_form_complete } = useSelector(state => state.product);
+    const { id, maxPage } = useSelector(state => state.product);
 
     useEffect(() => {
 
         if(!id){
             router.push('details');
         }
-        else if(product_form_complete < 75){
+        else if(maxPage < 4){
             router.push('sizes');
         }
 

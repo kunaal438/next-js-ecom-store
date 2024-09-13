@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 'use client'
 
-import { addProductImage, reArrageProductImageOrder, removeProductImage } from "@/reducer/product.redux";
+import { addProductImage, forwardProductForm, reArrageProductImageOrder, removeProductImage } from "@/reducer/product.redux";
 import { faChevronLeft, faChevronRight, faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
@@ -23,7 +23,7 @@ const AddProductImagesForm = () => {
     const [deleteImage, setDeleteImage] = useState(null);
     const [activeImage, setActiveImage] = useState(null);
 
-    const { images, id } = useSelector(state => state.product);
+    const { images, id, maxPage } = useSelector(state => state.product);
     const dispatch = useDispatch();
 
     const router = useRouter();
@@ -48,6 +48,25 @@ const AddProductImagesForm = () => {
         }
     }
 
+    const deleteUploadedImagesForCloud = async (imagesURL) => {
+        
+        const imagesToDelete = imagesURL.filter((url) => !images.includes(url));
+        try {
+
+            await axios.delete('/api/delete-image', {
+                headers: {
+                  'Image-List': JSON.stringify(imagesToDelete), // Custom header
+                }
+            });
+
+            console.log('Uploaded Images deleted from cloud because of some error occured while saving those images.....')
+
+        } catch(err){
+            console.error(err);
+        }
+
+    }
+
     const handleSubmit = async () => {
         
         if(images.length != maxUploadImagesLimit || !id){
@@ -64,13 +83,12 @@ const AddProductImagesForm = () => {
             let img = images[i];
 
             // upload image 1 by one and store it in database;
-            if(img.includes('http')){ // already a url
+            if(img.includes('https')){ // already a url
                 imagesURL.push(img);
                 continue;
             }
 
             try {
-
                 // request to backend to upload the image
                 const response = await axios.post('/api/upload-image', { img });
 
@@ -92,7 +110,7 @@ const AddProductImagesForm = () => {
 
         if(imagesURL.length != maxUploadImagesLimit){ 
             // delete all the images stored in imagesURL only if they are not inside images reducer ( then only they will be recent ones )
-
+            deleteUploadedImagesForCloud(imagesURL);
             setUploadingImage(0);
             return 
         }
@@ -100,17 +118,18 @@ const AddProductImagesForm = () => {
 
         try {
 
-            await axios.post("/api/admin/product/add-product/images", { images: imagesURL, id });
+            const isNew = !(maxPage > 4);
+
+            await axios.post("/api/admin/product/add-product/images", { images: imagesURL, id, isNew });
 
             setLoading(false);
             setUploadingImage(0);
-
             router.push("/admin/products");
 
         } catch(err){
 
             // delete all the images stored in imagesURL only if they are not inside images reducer ( then only they will be recent ones )
-
+            deleteUploadedImagesForCloud(imagesURL);
             setLoading(false);
             setUploadingImage(0);
 
@@ -157,7 +176,9 @@ const AddProductImagesForm = () => {
                     setDeleteImage(null);
                 }}
             >
-                <Image src={images[deleteImage]} width="0" height="0" className="max-sm:w-[200px] mx-auto w-[500px] h-auto rounded-sm" alt="Delete Image" />
+                <div className="relative max-sm:w-[200px] max-sm:h-[300px] w-[300px] h-[400px]">
+                <Image src={images[deleteImage]} layout="fill" className="w-full h-full object-cover rounded-sm" alt="Delete Image" />
+                </div>
             </DeleteConfirmation>
         }
         <div>
@@ -188,11 +209,11 @@ const AddProductImagesForm = () => {
                         images.map((img, i) => {
                             return (
                                 <div className="w-[120px] rounded-md bg-black-300 aspect-square relative" key={i}>
-                                    <Image src={img} width="0" height="0" className="rounded-md w-full h-full object-cover" alt="Uploaded Image" onClick={() => setActiveImage(img)} />
+                                    <Image src={img} layout="fill" className="rounded-md w-full h-full object-cover" alt="Uploaded Image" onClick={() => setActiveImage(img)} />
 
                                     {
                                         activeImage == img &&
-                                        <div className="absolute top-[110%] left-0 w-full flex gap-2 justify-center">
+                                        <div className="absolute bottom-0 left-0 w-full flex gap-2 justify-center bg-black-300/60 backdrop-blur-sm rounded-b-md py-2">
                                             
                                             {
                                                 i != 0 &&

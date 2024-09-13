@@ -1,6 +1,6 @@
 import TextArea from "@/components/inputs/TextArea.component";
 import Loader from "@/components/Loader.component";
-import { forwardForm, setProductDescription, setProductMaterialCare } from "@/reducer/product.redux";
+import { forwardProductForm, setProductDescription, setProductMaterialCare } from "@/reducer/product.redux";
 import ExtractFormData from "@/utils/ExtractFormData.utils";
 import validateProductDescriptionForm from "@/utils/form-validations/product-validations/product-description";
 import { toastStyle } from "@/utils/toastStyles";
@@ -19,7 +19,7 @@ const AddProductDescriptionForm = () => {
     const [formErrors, setFormErrors] = useState({});
     const formRef = useRef();
     
-    const { details: { description, materialCare }, id } = useSelector(state => state.product);
+    const { details: { description, materialCare }, id, maxPage } = useSelector(state => state.product);
 
     const dispatch = useDispatch();
     const router = useRouter();
@@ -44,10 +44,12 @@ const AddProductDescriptionForm = () => {
 
         try {
 
-            await axios.post('/api/admin/product/add-product/description', { ...formData, id });
+            const isNew = !(maxPage > 2);
+
+            await axios.post('/api/admin/product/add-product/description', { ...formData, id, isNew });
 
             setLoading(false);
-            dispatch(forwardForm())
+            isNew && dispatch(forwardProductForm())
             router.push("sizes")
 
         } catch(err){

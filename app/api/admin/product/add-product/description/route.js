@@ -13,7 +13,7 @@ export const POST = async (req) => {
 
     const formData = await req.json();
 
-    const { id, description, materialCare } = formData;
+    const { id, description, materialCare, isNew } = formData;
 
     if(!id){
         return new Response(JSON.stringify({ err: "No Product ID" }), { status: 403 });
@@ -32,7 +32,16 @@ export const POST = async (req) => {
 
         await connectDB();
 
-        const product = await Product.findOneAndUpdate({ product_id: id }, { details: { description, materialCare }, product_form_complete: 50 });
+        let productData = { details: { description, materialCare } };
+
+        if(isNew){ // only changing the maxPage if its new / first time submit where maxPage is less than 3
+            productData = {
+                ...productData,
+                maxPage: 3 // 3 -> for sizes page
+            }
+        }
+
+        const product = await Product.findOneAndUpdate({ product_id: id }, productData);
 
         if(!product){
             return new Response(JSON.stringify({ err: "Product not found" }), { status: 404 });

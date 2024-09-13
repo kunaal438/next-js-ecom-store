@@ -10,11 +10,11 @@ import AddProductDescriptionOutput from "@/components/add-product/output/addProd
 const AddProductDescriptionPage = () => {
 
     const router = useRouter();
-    const { id, product_form_complete } = useSelector(state => state.product);
+    const { id, maxPage } = useSelector(state => state.product);
 
     useEffect(() => {
 
-        if(!id || product_form_complete < 25){
+        if(!id || maxPage < 2){
             router.push('details');
         }
 

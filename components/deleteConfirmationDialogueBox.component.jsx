@@ -6,7 +6,7 @@ const DeleteConfirmation = ({ children, cancelFunc, deleteFunc }) => {
                 <h1 className="font-bold text-lg mb-2">Are you sure ??</h1>
 
                 <p className="my-3">Do you want to delete : </p>
-                <div className="p-3 bg-white-200/50">
+                <div className="relative p-3 bg-white-200/50">
                     {children}
                 </div>
 

@@ -15,10 +15,10 @@ export const GET = async (req, { params }) => {
 
         await connectDB();
 
-        let product = await Product.findOne({ product_id: id }).select(" title brand stock price category color tags details sizes images product_form_complete -_id ");
+        let product = await Product.findOne({ product_id: id }).select(" title brand stock price category color tags details sizes images maxPage -_id ");
 
         if(!product){
-            return new Response(JSON.stringify({ err: "Product you are lookiung for does not exists" }), { status: 404 })
+            return new Response(JSON.stringify({ err: "Product you are looking for does not exists" }), { status: 404 })
         }
 
         // replace "product_id" key wiht "id" for frontend

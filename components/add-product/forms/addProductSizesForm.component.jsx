@@ -2,7 +2,7 @@
 import InputField from "@/components/inputs/Input.component";
 import TextArea from "@/components/inputs/TextArea.component";
 import Loader from "@/components/Loader.component";
-import { addProductSize, forwardForm, reArrageProductSizeOrder, rearrageProductSizeOrder, removeProductSize, updateProductSize } from "@/reducer/product.redux";
+import { addProductSize, forwardProductForm, reArrageProductSizeOrder, removeProductSize, updateProductSize } from "@/reducer/product.redux";
 import validateProductSizes from "@/utils/form-validations/product-validations/product-sizes";
 import { toastStyle } from "@/utils/toastStyles";
 import { faChevronLeft, faChevronRight, faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -35,7 +35,7 @@ const AddProductSizesForm = () => {
     const [activeSizeBtn, setActiveSizeBtn] = useState("");
     const [deleteSize, setDeleteSize] = useState(null);
 
-    const { sizes, id } = useSelector(state => state.product);
+    const { sizes, id, maxPage } = useSelector(state => state.product);
     const dispatch = useDispatch();
 
     const maxSizeNameLength = 5;
@@ -108,10 +108,12 @@ const AddProductSizesForm = () => {
 
         try {
 
-            await axios.post('/api/admin/product/add-product/sizes', { sizes, id });
+            const isNew = !(maxPage > 3);
+
+            await axios.post('/api/admin/product/add-product/sizes', { sizes, id, isNew });
 
             setLoading(false);
-            dispatch(forwardForm())
+            isNew && dispatch(forwardProductForm())
             router.push("images")
 
         } catch(err){

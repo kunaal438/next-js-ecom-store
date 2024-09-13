@@ -7,7 +7,7 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -22,11 +22,11 @@ const AddProductPageTemplate = ({ children }) => {
 
     const [loading, setLoading] = useState(false);
 
-    const { product_form_complete } = useSelector(state => state.product);
-
     const formSteps = ["details", "description", "sizes", "images"];
     const dispatch = useDispatch();
     const router = useRouter();
+
+    const { maxPage } = useSelector(state => state.product);
 
     const handleBeforeUnload = (event) => {
         const message = "You have unsaved changes. Are you sure you want to leave?";
@@ -82,7 +82,7 @@ const AddProductPageTemplate = ({ children }) => {
                             formSteps.map((step,i) => {
                                 return (
                                     <div key={i} className="flex gap-1 items-center">
-                                        <Link href={step} className={"capitalize hover:underline " + ( pathname.includes(step) ? " text-black-300 font-semibold " : " text-black-100 " ) + ( (product_form_complete/25 < i) ? "pointer-events-none" : "pointer-events-auto")}>{step}</Link>
+                                        <Link href={step} className={"capitalize hover:underline " + ( pathname.includes(step) ? " text-black-300 font-semibold " : " text-black-100 " ) + (i+1 <= maxPage ? "pointer-events-auto": "pointer-events-none")}>{step}</Link>
                                         {
                                             (i != formSteps.length - 1) && 
                                             <FontAwesomeIcon className="scale-[0.6] text-black-100" icon={faChevronRight} />

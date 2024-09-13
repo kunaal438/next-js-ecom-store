@@ -75,9 +75,13 @@ const ProductSchema = new Schema({
         ]
     },
     images: [String],
-    product_form_complete: {
+    maxPage: {
         type: Number,
-        required: [true, "Need to know how much form is complete"]
+        default: 1
+    },
+    archived: {
+        type: Boolean,
+        default: true
     }
 
 })

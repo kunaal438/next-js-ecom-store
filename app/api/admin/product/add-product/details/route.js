@@ -26,7 +26,7 @@ export const POST = async (req) => {
  
     const formData = await req.json();
 
-    const { title, brand, color, category, tags, stock, sellingPrice, actualPrice, id } = formData;
+    const { title, brand, color, category, tags, stock, sellingPrice, actualPrice, id, isNew } = formData;
 
     // validate form
     const validForm = validateProductDetailsForm(formData);
@@ -46,6 +46,13 @@ export const POST = async (req) => {
             title, brand, color, category, tags, stock, price: { sellingPrice, actualPrice }
         }
 
+        if(isNew){ // only changing the maxPage if its new / first time submit where maxPage is less than 2
+            productData = {
+                ...productData,
+                maxPage: 2 // 2 -> for descriptions page
+            }
+        }
+
         if(id){
 
             await Product.findOneAndUpdate({ product_id: id }, productData);
@@ -57,7 +64,7 @@ export const POST = async (req) => {
         
         productData = {
             ...productData,
-            product_id, product_form_complete: 25
+            product_id
         }
 
         const product = new Product(productData);

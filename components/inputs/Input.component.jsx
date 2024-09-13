@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const InputField = ({ refVal, type, disable, placeholder, name, displayError, max, onChange, value, inputClasses, onKeyDown, onBlur, errorStyles }) => {
 
-    const [inputFocused, setInputFocus] = useState(String(value)?.length ? true : false);
+    const [inputFocused, setInputFocus] = useState(!value ? false : String(value)?.length ? true : false);
     
     const addFocus = () => {
         setInputFocus(true)
