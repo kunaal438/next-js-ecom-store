@@ -10,6 +10,8 @@ const ProductSchema = new Schema({
     title: {
         type: String,
         required: [true, "Need product title to proceed"],
+        trim: true,
+        lowercase: true
     },
     brand: {
         type: String,
@@ -18,7 +20,11 @@ const ProductSchema = new Schema({
     stock: {
         type: Number,
         required: [true, "Need product stocks"],
-        min: [1, "Provide product stocks detail"]
+        validate: {
+            validator: (v) => {
+              v >= 1 ? true : "Invalid Product Stock Provided"
+            }
+        },
     },
     price: {
         sellingPrice: {

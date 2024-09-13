@@ -8,15 +8,9 @@ const SelectInput = ({ placeholder, name, displayError, value, inputClasses, opt
 
     const [inputFocused, setInputFocus] = useState(value?.length ? true : false);
     
-    const addFocus = () => {
-        setInputFocus(true)
-    }
+    const addFocus = () => { setInputFocus(true) }
 
-    const removeFocus = (e) => {
-        if(!e.target.value.length){
-            setInputFocus(false);
-        }
-    }
+    const removeFocus = (e) => { (!e.target.value.length) && setInputFocus(false) }
 
     return (
         <div className="w-full">

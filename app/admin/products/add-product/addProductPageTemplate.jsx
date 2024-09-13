@@ -38,19 +38,20 @@ const AddProductPageTemplate = ({ children }) => {
 
         let product_id = query.get("id");
         
-        // fetch product info
         if(product_id){
             setLoading(true);
-            fetchProductData({ id: product_id }).then(data => {
+            fetchProductData(product_id).then(data => {
                 if(data){
+
+                    document.title = "Editing - " + data.title;
+
                     dispatch(setProductReducer(data));
                     setLoading(false);
-                    console.log('set the product reducer')
                 }
             }).catch(err => { 
                 setLoading(false);
-                router.push("/admin/products");
                 console.error(err); 
+                router.push("/admin/products");
             })
         }
 
@@ -73,7 +74,7 @@ const AddProductPageTemplate = ({ children }) => {
             <div className="relative w-[60%] h-full p-10 pr-16 pb-20">
                 <div className="w-[80%] min-w-[500px] ml-auto h-full">
                     <Link href="/admin/products">
-                    <Image src="/assets/logo.png" className="mb-12" width={150} height={20} alt="Logo" />
+                        <Image src="/assets/logo.png" className="mb-12 w-auto h-auto" width={125} height={17} alt="Logo" />
                     </Link>
 
                     {/* route */}
@@ -82,7 +83,7 @@ const AddProductPageTemplate = ({ children }) => {
                             formSteps.map((step,i) => {
                                 return (
                                     <div key={i} className="flex gap-1 items-center">
-                                        <Link href={step} className={"capitalize hover:underline " + ( pathname.includes(step) ? " text-black-300 font-semibold " : " text-black-100 " ) + (i+1 <= maxPage ? "pointer-events-auto": "pointer-events-none")}>{step}</Link>
+                                        <Link href={step} className={"capitalize hover:underline " + ( pathname.includes(step) ? " text-black-300 font-semibold " : " text-black-100 " ) + (i + 1 <= maxPage ? " pointer-events-auto ": " pointer-events-none " )}>{step}</Link>
                                         {
                                             (i != formSteps.length - 1) && 
                                             <FontAwesomeIcon className="scale-[0.6] text-black-100" icon={faChevronRight} />

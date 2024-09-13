@@ -12,10 +12,9 @@ import Link from "next/link";
 import Loader from "@/components/Loader.component";
 import ExtractFormData from "@/utils/ExtractFormData.utils";
 import validateProductDetailsForm from "@/utils/form-validations/product-validations/product-details";
-import axios, { isAxiosError } from "axios";
-import toast from "react-hot-toast";
-import { toastStyle } from "@/utils/toastStyles";
+import axios from "axios";
 import { useRouter } from "next/navigation";
+import handleErrorFromServer from "@/utils/errorHandling";
 
 const AddProductDetailsForm = () => {
     // loading state
@@ -74,24 +73,7 @@ const AddProductDetailsForm = () => {
 
         } catch(err){
             setLoading(false);
-
-            if(isAxiosError(err)){
-
-                const errInResponse = err.response.data;
-
-                if(errInResponse?.type == "form-error"){
-                    setFormErrors(errInResponse.err)
-                } 
-                else {
-                    toast.error(errInResponse.err, toastStyle);
-                    console.error(errInResponse.err);
-                }
-                return;
-            }
-
-            toast.error(err, toastStyle);
-            console.error(err);
-            return;
+            handleErrorFromServer(err, setFormErrors)
         }
 
     }
@@ -130,6 +112,8 @@ const AddProductDetailsForm = () => {
     const updateProductColor = (colorName, updatingOnBlur = false) => {
 
         if(!colorName.length || !colorName) { return };
+
+        colorName = colorName.toLowerCase();
         
         setFormErrors(prev => {
             return { ...prev, color: "" }
@@ -191,10 +175,8 @@ const AddProductDetailsForm = () => {
 
     const handleProductColorFieldBlur = () => {
         setTimeout(() => {
-
             updateProductColor(colorFieldRef.current.value, true)
             setColorFieldFocused(false);
-
         }, 200)
     }
 

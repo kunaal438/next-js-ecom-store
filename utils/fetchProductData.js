@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import { toastStyle } from "./toastStyles";
 import axios, { isAxiosError } from "axios";
 
-const fetchProductData = async ({ id, fail_url }) => {
+const fetchProductData = async (id) => {
 
     if(!id) {
         throw toast.error("Product Id is not provided to fetch", toastStyle);

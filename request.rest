@@ -1,8 +1,1 @@
-POST http://localhost:3000/api/auth/signup
-Content-Type: "application/json"
-
-{
-    "fullname": "kunaal",
-    "email": "kunaal1@gmail.com",
-    "password": "Kunaal12"
-}
+GET http://localhost:3000/api/product/test-productG2MbFRt78U/get-title

@@ -1,16 +1,15 @@
 import TextArea from "@/components/inputs/TextArea.component";
 import Loader from "@/components/Loader.component";
 import { forwardProductForm, setProductDescription, setProductMaterialCare } from "@/reducer/product.redux";
+import handleErrorFromServer from "@/utils/errorHandling";
 import ExtractFormData from "@/utils/ExtractFormData.utils";
 import validateProductDescriptionForm from "@/utils/form-validations/product-validations/product-description";
-import { toastStyle } from "@/utils/toastStyles";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios, { isAxiosError } from "axios";
+import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useRef } from "react";
-import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
 const AddProductDescriptionForm = () => {
@@ -54,24 +53,7 @@ const AddProductDescriptionForm = () => {
 
         } catch(err){
             setLoading(false);
-
-            if(isAxiosError(err)){
-
-                const errInResponse = err.response.data;
-
-                if(errInResponse?.type == "form-error"){
-                    setFormErrors(errInResponse.err)
-                } 
-                else {
-                    toast.error(errInResponse.err, toastStyle);
-                    console.error(errInResponse.err);
-                }
-                return;
-            }
-
-            toast.error(err, toastStyle);
-            console.error(err);
-            return;
+            handleErrorFromServer(err, setFormErrors);
         }
 
     }

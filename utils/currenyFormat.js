@@ -1,5 +1,1 @@
-const getInCurreny = (amount) => {
-    return '₹' + amount;
-}
-
-export { getInCurreny };
+export const getInCurreny = (amount) => '₹' + amount

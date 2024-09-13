@@ -2,38 +2,30 @@
 
 import { useState } from "react";
 
-const InputField = ({ refVal, type, disable, placeholder, name, displayError, max, onChange, value, inputClasses, onKeyDown, onBlur, errorStyles }) => {
+const InputField = ({ refVal, type, placeholder, name, displayError, max, onChange, value, inputClasses, onKeyDown, onBlur, errorStyles }) => {
 
     const [inputFocused, setInputFocus] = useState(!value ? false : String(value)?.length ? true : false);
     
-    const addFocus = () => {
-        setInputFocus(true)
-    }
+    const addFocus = () => { setInputFocus(true) }
 
-    const removeFocus = (e) => {
-        if(!e.target.value.length){
-            setInputFocus(false);
-        }
-    }
+    const removeFocus = (e) => { !e.target.value.length && setInputFocus(false) }
 
     const handleBlur = (e) => {
+
         removeFocus(e);
-        onBlur && onBlur(e);
+
+        onBlur && onBlur(e); // add any blur event
+
     }
 
-    const preventNumArrowKeysFromFunction = (e) => {
-        if(e.key == "ArrowUp" || e.key == "ArrowDown"){
-            e.preventDefault();
-        }
-    }
+    const preventNumArrowKeysFromFunction = (e) => { (e.key == "ArrowUp" || e.key == "ArrowDown") && e.preventDefault(); }
 
     const handleKeyDown = (e) => {
 
-        if(type == "number"){
-            preventNumArrowKeysFromFunction(e);
-        }
+        (type == "number") && preventNumArrowKeysFromFunction(e);
 
-        onKeyDown && onKeyDown(e);
+        onKeyDown && onKeyDown(e); // add any keyDown event
+
     }
 
     return (
@@ -42,7 +34,6 @@ const InputField = ({ refVal, type, disable, placeholder, name, displayError, ma
                 
                 <input 
                     ref={refVal}
-                    disabled={disable}
                     onChange={onChange}
                     onKeyDown={handleKeyDown}
                     defaultValue={value}

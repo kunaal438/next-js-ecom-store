@@ -15,7 +15,7 @@ const AddProductDetailsOutput = () => {
                 <div className="relative bg-white-200/50 border border-white-300/20 h-[350px] rounded-sm">
                     {
                         images[0] &&
-                        <Image src={images[0]} layout="fill" alt="image" className="w-full h-full object-cover" />
+                        <Image src={images[0]} alt="image" className="w-full h-full object-cover" priority width={275} height={350} />
                     }
                 </div>
                 

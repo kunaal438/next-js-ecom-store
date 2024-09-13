@@ -10,13 +10,12 @@ import Link from "next/link";
 import { useRef, useEffect, useState } from "react";
 import ExtractFormData from "@/utils/ExtractFormData.utils";
 import Loader from "@/components/Loader.component";
-import axios, { isAxiosError } from "axios";
+import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "@/reducer/user.redux";
 import signInWithGoogle from "@/utils/signInWithGoogle";
-import toast from "react-hot-toast";
-import { toastStyle } from "@/utils/toastStyles";
 import validateAuthenticationData from "@/utils/form-validations/authentication-detaila";
+import handleErrorFromServer from "@/utils/errorHandling";
  
 const AuthPage = ({ params }) => {
 
@@ -33,17 +32,11 @@ const AuthPage = ({ params }) => {
 
     const router = useRouter();
 
-    if(route != "login" && route != "signup"){
-        notFound();
-    }
+    if(route != "login" && route != "signup"){ notFound() }
 
     useEffect(() => {
 
-        if(isUserAuthenticated){
-
-            router.push("/");
-
-        }
+        if(isUserAuthenticated){ router.push("/") }
 
     }, [isUserAuthenticated])
 
@@ -71,20 +64,7 @@ const AuthPage = ({ params }) => {
 
         } catch(err){
             setLoading(false);
-
-            if(isAxiosError(err)){
-
-                const errInResponse = err.response.data;
-                
-                toast.error(errInResponse.err, toastStyle);
-                console.error(errInResponse.err);
-                return;
-            }
-
-            toast.error(err, toastStyle);
-            console.error(err);
-
-            return;
+            handleErrorFromServer(err)
         }
 
     }
@@ -123,24 +103,7 @@ const AuthPage = ({ params }) => {
 
         } catch(err){
             setLoading(false);
-
-            if(isAxiosError(err)){
-
-                const errInResponse = err.response.data;
-
-                if(errInResponse?.type == "form-error"){
-                    setFormErrors(errInResponse.err)
-                } 
-                else {
-                    toast.error(errInResponse.err, toastStyle);
-                    console.error(errInResponse.err);
-                }
-                return;
-            }
-
-            toast.error(err, toastStyle);
-            console.error(err);
-            return;
+            handleErrorFromServer(err, setFormErrors);
         }
         
     }

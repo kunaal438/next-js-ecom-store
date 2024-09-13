@@ -30,10 +30,7 @@ const AdminCheckWrapper = ({ children }) => {
         switch (adminLoggedIn) {
 
             case null:
-                checkAdminLogin().then((status) => {
-                    dispatch(setAdminStatus(status));
-                });
-
+                checkAdminLogin().then((status) => { dispatch(setAdminStatus(status)) });
                 break;
 
             case false:

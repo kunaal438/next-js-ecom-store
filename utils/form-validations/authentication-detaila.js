@@ -26,6 +26,7 @@ const validateAuthenticationData = (formData) => {
     }
 
     return { isValid, error };        
+    
 }
 
 export default validateAuthenticationData;

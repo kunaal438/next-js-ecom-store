@@ -1,13 +1,6 @@
 import validAdminRequest from "@/utils/backend/adminVerification.utils";
 import cloudinary from "@/utils/cloudinaryConfig";
-
-export const extractPublicId = (url) => {
-    let urlInArray = url.split("/");
-    let idWithFileType = urlInArray.splice(urlInArray.length-2, urlInArray.length - 1).join("/");
-    let publicId = idWithFileType.split(".png")[0];
-
-    return publicId;
-}
+import extractPublicId from "@/utils/extractPublicID";
 
 export const DELETE = async (req) => {
 
@@ -29,7 +22,7 @@ export const DELETE = async (req) => {
             try {
                 
                 let publicId = extractPublicId(img);
-                const result = await cloudinary.uploader.destroy(publicId);
+                await cloudinary.uploader.destroy(publicId);
 
             } catch(err){
                 console.log(err);

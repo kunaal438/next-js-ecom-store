@@ -19,8 +19,6 @@ const AddProductSizesOutput = () => {
                         <div key={i} className="group relative flex items-center justify-center w-14 h-14 bg-white-300/20 rounded-full border border-white-300 cursor-pointer">
                             <p className="uppercase font-semibold text-lg">{name}</p>
                             <div className="p-4 border border-white-300 bg-white-100 absolute top-[120%] left-0 rounded-md min-w-[200px] shadow-xl shadow-black-100/10 pointer-events-none opacity-0 group-hover:pointer-events-auto group-hover:opacity-100 duration-300">
-                                {/* <p className="font-semibold text-nowrap">Size Detail</p>
-                                <hr className="border-white-200 mb-3 mt-2" /> */}
                                 <pre className="font-assistant text-black-100/60 capitalize">{des}</pre>
                             </div>
                         </div>

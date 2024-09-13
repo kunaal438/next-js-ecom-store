@@ -19,7 +19,7 @@ const Navbar = () => {
     const dispatch = useDispatch();
 
     const handleBlurOnUserIcon = () => {
-        setTimeout(() => {
+        setTimeout(() => { // timeout for links to work 
             setUserPanel(false);
         }, 200)
     }
@@ -43,7 +43,7 @@ const Navbar = () => {
         <nav className="w-full h-[80px] py-2 px-[5vw] flex items-center justify-between border-b border-white-300">
 
             <Link href={"/"}>
-                <Image src="/assets/logo.png" width={150} height={20} alt="Logo" />
+                <Image src="/assets/logo.png" className="w-[150px] h-[17px]" width={150} height={17} alt="Logo" />
             </Link>
 
             <div className="flex items-center max-sm:gap-3 gap-6">

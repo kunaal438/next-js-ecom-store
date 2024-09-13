@@ -8,7 +8,6 @@ import jwt from "jsonwebtoken"
 export const POST = async (req) => {
     
     const formData = await req.json();
-
     const { fullname, email, password } = formData;
 
     const form = validateAuthenticationData(formData);
@@ -51,7 +50,7 @@ export const POST = async (req) => {
 
         setAccessTokenCookie(token);
 
-        return new Response(JSON.stringify({ fullname, email }), { status: 200 })
+        return new Response(JSON.stringify({ fullname, email, admin: false }), { status: 200 })
 
     } catch(err) {
         console.log(err)

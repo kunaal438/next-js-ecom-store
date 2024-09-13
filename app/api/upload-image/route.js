@@ -27,7 +27,6 @@ export const POST = async (req) => {
         return new Response(JSON.stringify({ url: result.secure_url }), { status: 200 })
 
     } catch(err){
-
         console.log(err);
         return new Response(JSON.stringify({ err: err.message }), { status: 500 });
     }

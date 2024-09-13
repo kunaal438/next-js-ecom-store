@@ -12,4 +12,4 @@ const setAccessTokenCookie = (token) => {
 
 }
 
-export default setAccessTokenCookie
+export default setAccessTokenCookie;

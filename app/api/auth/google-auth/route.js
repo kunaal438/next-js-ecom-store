@@ -12,9 +12,7 @@ export const POST = async (req) => {
     const access_token = req_headers.get('authorization')?.split('Bearer ')[1];
 
     if(!access_token){
-        return new Response(JSON.stringify({
-            err: "Data is invalid. Please try again"
-        }), { status: 400 })
+        return new Response(JSON.stringify({ err: "Data is invalid. Please try again" }), { status: 400 })
     }
 
     try {
@@ -37,9 +35,7 @@ export const POST = async (req) => {
             } 
             else if(userExists.google_auth != uid) {
                 
-                return  new Response(JSON.stringify({
-                    err: "Unable to verfiy your identity. Please try again or log in with password"
-                }), { status: 403 })
+                return  new Response(JSON.stringify({ err: "Unable to verfiy your identity. Please try again or log in with password" }), { status: 403 })
 
             }
              
@@ -65,12 +61,8 @@ export const POST = async (req) => {
         return new Response(JSON.stringify({ fullname: name, email, admin: userExists.isAdmin }), { status: 200 })
 
     } catch(err){
-        
         console.log(err);
-
-        return new Response(JSON.stringify({
-            err: "Some error occured while processing your request. Please try again."
-        }), { status: 500 })
+        return new Response(JSON.stringify({ err: "Some error occured while processing your request. Please try again." }), { status: 500 })
     }
 
 }

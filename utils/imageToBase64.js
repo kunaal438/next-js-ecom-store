@@ -1,5 +1,7 @@
 const getBase64Image = (file) => {
+    
     return new Promise((resolve, reject) => {
+        
         if (!file) {
             reject("No file provided");
             return;
@@ -17,6 +19,7 @@ const getBase64Image = (file) => {
 
         reader.readAsDataURL(file);
     });
+
 };
 
 export default getBase64Image;

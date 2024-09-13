@@ -73,6 +73,7 @@ const productSlice = createSlice({
             newTagsArray = state.tags.filter((_, i) => i != action.payload);
 
             return { ...state, tags: newTagsArray}
+
         },
 
         setProductDescription: (state, action) => {
@@ -100,13 +101,16 @@ const productSlice = createSlice({
         },
 
         removeProductSize: (state, action) => {
+
             let newSizeArray = [...state.sizes];
             newSizeArray = state.sizes.filter((_, i) => i != action.payload);
 
             return { ...state, sizes: newSizeArray}
+
         },
 
         reArrageProductSizeOrder: (state, action) => {
+
             const { index, type } = action.payload;
 
             const newSizesArray = reArrageArrayOrder({ index, type, array: state.sizes })
@@ -116,9 +120,7 @@ const productSlice = createSlice({
         },
         
         addProductImage: (state, action) => {
-
             return { ...state, images: [...state.images, action.payload] }
-
         },
 
         removeProductImage: (state, action) => {
@@ -131,6 +133,7 @@ const productSlice = createSlice({
         },
 
         reArrageProductImageOrder: (state, action) => {
+
             const { index, type } = action.payload;
 
             const newImagesArray = reArrageArrayOrder({ index, type, array: state.images })
@@ -140,10 +143,10 @@ const productSlice = createSlice({
         },
         
         resetProductReducer: () => {
-            return initialState
+            return initialState;
         },
 
-        setProductReducer: (state, action) => {
+        setProductReducer: (_, action) => {
             return action.payload;
         }
 

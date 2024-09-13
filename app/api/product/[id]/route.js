@@ -6,9 +6,7 @@ export const GET = async (req, { params }) => {
     const { id } = params;
 
     if(!id){
-        return new Response(JSON.stringify({ 
-            err: "No Product ID Provide to look for"
-        }), { status: 400 })
+        return new Response(JSON.stringify({ err: "No Product ID Provide to look for" }), { status: 400 })
     }
 
     try {

@@ -4,15 +4,9 @@ const TextArea = ({ refVal, placeholder, name, displayError, max, onChange, valu
 
     const [inputFocused, setInputFocus] = useState(value?.length ? true : false);
     
-    const addFocus = () => {
-        setInputFocus(true)
-    }
+    const addFocus = () => { setInputFocus(true) }
 
-    const removeFocus = (e) => {
-        if(!e.target.value.length){
-            setInputFocus(false);
-        }
-    }
+    const removeFocus = (e) => { (!e.target.value.length) && setInputFocus(false) }
 
     const handleBlur = (e) => {
         removeFocus(e);
@@ -30,7 +24,8 @@ const TextArea = ({ refVal, placeholder, name, displayError, max, onChange, valu
             textarea.setAttribute("rows", rows + 1);
         }
 
-        onChange && onChange(e);
+        onChange && onChange(e); // run onChange evert if any
+
     }
 
     return (

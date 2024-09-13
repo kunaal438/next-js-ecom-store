@@ -1,5 +1,5 @@
 const ExtractFormData = (formEle) => {
-    if(!formEle){ return { } }
+    if(!formEle){ return }
 
     const form = new FormData(formEle);
     const formData = {};

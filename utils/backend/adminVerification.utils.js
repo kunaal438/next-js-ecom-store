@@ -9,9 +9,7 @@ const validAdminRequest = async (req) => {
     const access_token = cookieStore.get('access_token').value;
 
     if(!access_token){
-        return new Response(JSON.stringify({
-            err: "Looks like you are not logged in. Please log in first before making request"
-        }), { status: 403 })
+        return new Response(JSON.stringify({ err: "Looks like you are not logged in. Please log in first before making request" }), { status: 403 })
     }
 
     try {
@@ -25,9 +23,7 @@ const validAdminRequest = async (req) => {
         const user = await User.findOne({ _id: userId }).select("isAdmin");
 
         if(!user.isAdmin){
-            return new Response(JSON.stringify({
-                err: "You are not authorized to access the data"
-            }), { status: 403 })
+            return new Response(JSON.stringify({ err: "You are not authorized to access the data" }), { status: 403 })
         }
 
         return userId;
@@ -36,9 +32,7 @@ const validAdminRequest = async (req) => {
         
         console.log(err);
 
-        return new Response(JSON.stringify({
-            err: "Invalid token provided. Not able to validate your indentity"
-        }), { status: 500 })
+        return new Response(JSON.stringify({ err: "Invalid token provided. Not able to validate your indentity" }), { status: 500 })
         
     }
     

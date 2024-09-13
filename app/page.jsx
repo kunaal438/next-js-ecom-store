@@ -9,7 +9,7 @@ export const metadata = {
                 url: '',
                 width: 800,
                 height: 600,
-                alt: "E-commercer store: shop trendy cloths at afforable price"
+                alt: "E-commerce store: shop trendy cloths at afforable price"
             }
         ]
     },

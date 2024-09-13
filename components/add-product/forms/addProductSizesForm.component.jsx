@@ -7,13 +7,14 @@ import validateProductSizes from "@/utils/form-validations/product-validations/p
 import { toastStyle } from "@/utils/toastStyles";
 import { faChevronLeft, faChevronRight, faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios, { isAxiosError } from "axios";
+import axios from "axios";
 import Link from "next/link";
 import { useState, useRef } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import DeleteConfirmation from "@/components/deleteConfirmationDialogueBox.component";
+import handleErrorFromServer from "@/utils/errorHandling";
 
 const AddProductSizesForm = () => {
 
@@ -98,7 +99,7 @@ const AddProductSizesForm = () => {
             const sizeInfo = validateProductSizes(size);
     
             if(!sizeInfo.isValid){
-                toast.error("Sizes Data Structure is invalid.", toastStyle)
+                toast.error("Size's Data Structure is invalid.", toastStyle)
                 return;
             }
 
@@ -118,24 +119,7 @@ const AddProductSizesForm = () => {
 
         } catch(err){
             setLoading(false);
-
-            if(isAxiosError(err)){
-
-                const errInResponse = err.response.data;
-
-                if(errInResponse?.type == "form-error"){
-                    setErrors(errInResponse.err)
-                } 
-                else {
-                    toast.error(errInResponse.err, toastStyle);
-                    console.error(errInResponse.err);
-                }
-                return;
-            }
-
-            toast.error(err, toastStyle);
-            console.error(err);
-            return;
+            handleErrorFromServer(err)
         }
 
     }

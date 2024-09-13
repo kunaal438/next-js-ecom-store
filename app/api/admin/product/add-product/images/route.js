@@ -1,4 +1,4 @@
-import { extractPublicId } from "@/app/api/delete-image/route";
+import extractPublicId from "@/utils/extractPublicID";
 import Product from "@/schema/Product.schema";
 import validAdminRequest from "@/utils/backend/adminVerification.utils";
 import connectDB from "@/utils/backend/connectMongoDB";

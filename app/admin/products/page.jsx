@@ -15,63 +15,57 @@ const AdminProductsManagement = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const queryObject = Object.fromEntries(searchParams.entries());
+    const query = new URLSearchParams(queryObject);
     const dispatch = useDispatch();
 
     const filterOptions = ["all", "men", "women", "accessories", "draft products", "archived products"];
 
     const [activeFilter, setActiveFilter] = useState(searchParams.get("filter") || filterOptions[0]);
 
-    useEffect(() => {
+    useEffect(() => { // reseting product reducer for "add-product" form
         dispatch(resetProductReducer());
     }, [])
 
     const redirectForSearch = (searchKey) => {
 
-        const newSearchParams = new URLSearchParams(queryObject);
-
         switch (searchKey.length) {
 
             case 0: 
-                newSearchParams.delete("search");
+                query.delete("search");
                 break;
 
             default: 
-                newSearchParams.set("search", searchKey);
+                query.set("search", searchKey);
                 break;
 
         }
         
-        router.push(`?${newSearchParams.toString()}`);
+        router.push(`?${query.toString()}`);
     }
 
-    const handleSearchBoxKeyDown = (e) => {
-        if(e.key == "Enter"){ redirectForSearch(e.target.value) }
-    }
+    const handleSearchBoxKeyDown = (e) => { e.key == "Enter" && redirectForSearch(e.target.value) }
     
-    const handelSearchBoxBlur = (e) => {
-        redirectForSearch(e.target.value);
-    }
+    const handelSearchBoxBlur = (e) => { redirectForSearch(e.target.value) }
 
     const changeFilter = (index) => {
 
         const filter = filterOptions[index];
-        const newSearchParams = new URLSearchParams(queryObject);
 
         setActiveFilter(filter);
 
         switch (filter) {
 
             case "all": 
-                newSearchParams.delete("filter");
+                query.delete("filter");
                 break;
 
             default: 
-                newSearchParams.set("filter", filter);
+                query.set("filter", filter);
                 break;
 
         }
         
-        router.push(`?${newSearchParams.toString()}`);
+        router.push(`?${query.toString()}`);
 
     }
 

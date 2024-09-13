@@ -21,7 +21,7 @@ const AddProductImagesOutput = () => {
                                 <div key={i} className="relative w-full h-full bg-white-300/20 border  border-white-300">
                                     {
                                         images[i] &&
-                                        <Image src={images[i]} layout="fill" alt="image" className="w-full h-full object-cover" />
+                                        <Image src={images[i]} width={300} height={500} alt="image" className="w-full h-full object-cover" />
                                     }
                                 </div>
                             )

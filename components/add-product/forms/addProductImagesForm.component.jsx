@@ -10,10 +10,9 @@ import Image from "next/image";
 import getBase64Image from "@/utils/imageToBase64";
 import Link from "next/link";
 import DeleteConfirmation from "@/components/deleteConfirmationDialogueBox.component";
-import axios, { isAxiosError } from "axios";
-import toast from "react-hot-toast";
-import { toastStyle } from "@/utils/toastStyles";
+import axios from "axios";
 import { useRouter } from "next/navigation";
+import handleErrorFromServer from "@/utils/errorHandling";
 
 const AddProductImagesForm = () => {
 
@@ -98,11 +97,7 @@ const AddProductImagesForm = () => {
 
             } catch(err){
                 setLoading(false);
-                console.error(err);
-
-                if(isAxiosError(err)){
-                    toast.error(err.response.data.er, toastStyle);
-                }
+                handleErrorFromServer(err);
                 break;
             }
 
@@ -127,29 +122,11 @@ const AddProductImagesForm = () => {
             router.push("/admin/products");
 
         } catch(err){
-
             // delete all the images stored in imagesURL only if they are not inside images reducer ( then only they will be recent ones )
             deleteUploadedImagesForCloud(imagesURL);
             setLoading(false);
             setUploadingImage(0);
-
-            if(isAxiosError(err)){
-
-                const errInResponse = err.response.data;
-
-                if(errInResponse?.type == "form-error"){
-                    setFormErrors(errInResponse.err)
-                } 
-                else {
-                    toast.error(errInResponse.err, toastStyle);
-                    console.error(errInResponse.err);
-                }
-                return;
-            }
-
-            toast.error(err, toastStyle);
-            console.error(err);
-            return;
+            handleErrorFromServer(err);
         }
 
     }
@@ -177,7 +154,7 @@ const AddProductImagesForm = () => {
                 }}
             >
                 <div className="relative max-sm:w-[200px] max-sm:h-[300px] w-[300px] h-[400px]">
-                <Image src={images[deleteImage]} layout="fill" className="w-full h-full object-cover rounded-sm" alt="Delete Image" />
+                    <Image src={images[deleteImage]} width={300} height={500} className="w-full h-full object-cover rounded-sm" alt="Delete Image" />
                 </div>
             </DeleteConfirmation>
         }
@@ -209,7 +186,7 @@ const AddProductImagesForm = () => {
                         images.map((img, i) => {
                             return (
                                 <div className="w-[120px] rounded-md bg-black-300 aspect-square relative" key={i}>
-                                    <Image src={img} layout="fill" className="rounded-md w-full h-full object-cover" alt="Uploaded Image" onClick={() => setActiveImage(img)} />
+                                    <Image src={img} width={150} height={150} className="rounded-md w-full h-full object-cover" alt="Uploaded Image" onClick={() => setActiveImage(img)} />
 
                                     {
                                         activeImage == img &&
