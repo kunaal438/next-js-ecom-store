@@ -19,7 +19,6 @@ const UserSchema = new Schema({
         type: String,
         match: [passwordRegex, 'Password should contain 1 uppercase letter, 1 number and should be at least8 characters long']
     }, 
-    google_auth: String,
     isAdmin: {
         type: Boolean,
         default: false

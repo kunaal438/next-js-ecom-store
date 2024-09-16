@@ -7,7 +7,7 @@ const validAdminRequest = async (req) => {
     
     const cookieStore = cookies();
     const access_token = cookieStore.get('access_token').value;
-
+    
     if(!access_token){
         return new Response(JSON.stringify({ err: "Looks like you are not logged in. Please log in first before making request" }), { status: 403 })
     }

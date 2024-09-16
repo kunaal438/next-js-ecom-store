@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@/reducer/user.redux";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
 
@@ -17,6 +18,8 @@ const Navbar = () => {
 
     const { auth: isUserAuthenticated, email: loggedInUserEmail, admin } = useSelector(state => state.user);
     const dispatch = useDispatch();
+    
+    const router = useRouter();
 
     const handleBlurOnUserIcon = () => {
         setTimeout(() => { // timeout for links to work 
@@ -28,10 +31,11 @@ const Navbar = () => {
 
         try {
 
-            await axios.post('/api/auth/logout');
-
+            await axios.post('/api/email-login/logout');
             dispatch(logout());
             
+            router.push('/api/auth/logout');
+
         } catch(err){
             console.error(err);
         }

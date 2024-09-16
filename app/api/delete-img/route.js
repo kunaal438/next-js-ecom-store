@@ -1,6 +1,5 @@
 import validAdminRequest from "@/utils/backend/adminVerification.utils";
-import cloudinary from "@/utils/cloudinaryConfig";
-import extractPublicId from "@/utils/extractPublicID";
+import deleteImagesFromCloud from "@/utils/backend/deleteImagesFromCloud";
 
 export const DELETE = async (req) => {
 
@@ -16,23 +15,15 @@ export const DELETE = async (req) => {
         return new Response(JSON.stringify({ err: "No image provided for delete" }, { status: 400 }))
     }
 
-    await Promise.all(
+    try {
 
-        images.map(async img => {
-            try {
-                
-                let publicId = extractPublicId(img);
-                await cloudinary.uploader.destroy(publicId);
+        await deleteImagesFromCloud(images);
 
-            } catch(err){
-                console.log(err);
-                return new Response(JSON.stringify({ err: err.message }), { status: 500 })
-            }
+        return new Response(null, { status: 200 })
 
-        })
-
-    )
-
-    return new Response(null, { status: 200 })
+    } catch(err) {
+        console.log(err);
+        return new Response(JSON.stringify({ err: err.message }), { status: 500 })
+    }
 
 }

@@ -6,6 +6,7 @@ import UserAuthenticationState from "@/components/UserAuthenticationState.compon
 import { Toaster } from "react-hot-toast";
 import Navbar from "@/components/Navbar.component";
 import { usePathname } from "next/navigation";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
 
 const LayoutWithProvider = ({ children }) => {
 
@@ -17,10 +18,12 @@ const LayoutWithProvider = ({ children }) => {
     return (
         <Provider store={store}>
 
-            <UserAuthenticationState />
-            <Toaster position="top-right" />
-            { showNavbar && <Navbar /> }
-            {children}
+            <UserProvider>
+                <UserAuthenticationState />
+                <Toaster position="top-right" />
+                { showNavbar && <Navbar /> }
+                {children}
+            </UserProvider>
             
         </Provider>
     )

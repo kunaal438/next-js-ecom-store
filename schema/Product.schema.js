@@ -21,9 +21,8 @@ const ProductSchema = new Schema({
         type: Number,
         required: [true, "Need product stocks"],
         validate: {
-            validator: (v) => {
-              v >= 1 ? true : "Invalid Product Stock Provided"
-            }
+            validator: (v) => v >= 1,
+            message: 'Invalid Product Stock Provided'
         },
     },
     price: {
@@ -41,7 +40,7 @@ const ProductSchema = new Schema({
         required: [true, "Select product category from the options provided"],
         enum: {
             values: productCategories,
-            message: "{Value} is not a valid category"
+            message: "{VALUE} is not a valid category"
         }
     },
     color: {
@@ -49,16 +48,15 @@ const ProductSchema = new Schema({
         required: [true, "Provide product color"],
         enum: {
             values: productColors,
-            message: "{Value} is not a valid color"
+            message: "{VALUE} is not a valid color"
         }
     },
     tags: {
         type: [String],
         required: [true, "Provide tags to add product"],
         validate: {
-            validator: (v) => {
-              v.length > 0 ? true : "Need at least 1 tag to add the product"
-            }
+            validator: (v) => v.length > 0, // Return true if there's at least 1 tag
+            message: 'Need at least 1 tag to add the product'
         },
     },
     details: {
@@ -90,7 +88,7 @@ const ProductSchema = new Schema({
         default: true
     }
 
-})
+}, { timestamps: true })
 
 const Product = models.Product || model('Product', ProductSchema);
 

@@ -39,9 +39,10 @@ const AdminSideNavbar = () => {
 
         try {
 
-            await axios.post('/api/auth/logout');
-
+            await axios.post('/api/email-login/logout');
             dispatch(logout());
+            
+            router.push('/api/auth/logout');
             
         } catch(err){
             console.error(err);

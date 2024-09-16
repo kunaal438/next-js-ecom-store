@@ -13,7 +13,6 @@ import Loader from "@/components/Loader.component";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "@/reducer/user.redux";
-import signInWithGoogle from "@/utils/signInWithGoogle";
 import validateAuthenticationData from "@/utils/form-validations/authentication-detaila";
 import handleErrorFromServer from "@/utils/errorHandling";
  
@@ -41,33 +40,33 @@ const AuthPage = ({ params }) => {
     }, [isUserAuthenticated])
 
 
-    const continueWithGoogle = async () => {
+    // const continueWithGoogle = async () => {
 
-        setLoading(true);
+    //     setLoading(true);
 
-        const userLoggingIn = await signInWithGoogle();
+    //     const userLoggingIn = await signInWithGoogle();
 
-        if(!userLoggingIn){
-            setLoading(false);
-        }
+    //     if(!userLoggingIn){
+    //         setLoading(false);
+    //     }
 
-        try {
+    //     try {
 
-            const response = await axios.post('/api/auth/google-auth', userLoggingIn, {
-                headers: {
-                    'Authorization': `Bearer ${userLoggingIn.access_token}`
-                }
-            });
+    //         const response = await axios.post('/api/auth/google-auth', userLoggingIn, {
+    //             headers: {
+    //                 'Authorization': `Bearer ${userLoggingIn.access_token}`
+    //             }
+    //         });
 
-            setLoading(false);
-            storeUserInSession(response.data);
+    //         setLoading(false);
+    //         storeUserInSession(response.data);
 
-        } catch(err){
-            setLoading(false);
-            handleErrorFromServer(err)
-        }
+    //     } catch(err){
+    //         setLoading(false);
+    //         handleErrorFromServer(err)
+    //     }
 
-    }
+    // }
 
     const storeUserInSession = (dataToStore) => {
 
@@ -96,7 +95,7 @@ const AuthPage = ({ params }) => {
 
         try {
 
-            const response = await axios.post(`/api/auth/${route}`, formData);
+            const response = await axios.post(`/api/email-login/${route}`, formData);
 
             setLoading(false);
             storeUserInSession(response.data);
@@ -139,10 +138,10 @@ const AuthPage = ({ params }) => {
                     <hr className="w-full border-white-300" />
                 </div>
 
-                <button className="primary_btn flex items-center justify-center gap-2 w-full" onClick={continueWithGoogle}>
+                <Link href="/api/auth/login" className="primary_btn flex items-center justify-center gap-2 w-full">
                     <Image src="/assets/google-icon.png" width="14" height="14" alt="google icon" />
                     Continue with google
-                </button>
+                </Link>
 
                 {
                     route == "login" ?
