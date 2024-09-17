@@ -30,22 +30,23 @@ const validateProductDetailsForm = (formData) => {
         isValid = false;
     }
 
-    if(!stock){
+    if(!Number(stock)){
         error.stock = "Provide the product stock";
         isValid = false;
     }
 
-    if(!sellingPrice){
+    if(!Number(sellingPrice)){
         error.sellingPrice = "Provide selling price for this product";
         isValid = false;
     }
 
-    if(!actualPrice){
+    if(!Number(actualPrice)){
         error.actualPrice = "Provide actual price of this product";
         isValid = false;
     }
 
-    if(actualPrice < sellingPrice){
+    if(Number(actualPrice) < Number(sellingPrice)){
+        console.log(actualPrice, sellingPrice)
         error.sellingPrice = "Selling price is higher than actual price";
         isValid = false;
     }

@@ -2,6 +2,7 @@ import Product from "@/schema/Product.schema";
 import validAdminRequest from "@/utils/backend/adminVerification.utils"
 import connectDB from "@/utils/backend/connectMongoDB";
 import extractParamsFromRequest from "@/utils/backend/extractParamsFromReq";
+import { headers } from "next/headers";
 
 export const GET = async (req) => {
 
@@ -13,13 +14,13 @@ export const GET = async (req) => {
 
     try {
 
-        const { search, filter, page, totalDocs } = extractParamsFromRequest(req);
+        const { search, filter, page } = extractParamsFromRequest(req);
 
         await connectDB();
 
         let filterQuery = { archived: false }
         const maxDocLimit = 10;
-        const skipDocs = page ? page + maxDocLimit : 0;
+        const skipDocs = page ? (page - 1) * maxDocLimit : 0;
         const sortOrder = { createdAt: -1 }
 
         if(search && search.length){
@@ -52,12 +53,13 @@ export const GET = async (req) => {
 
         const products = await Product.find(filterQuery).select(" product_id brand title stock price images archived -_id ").limit(maxDocLimit).skip(skipDocs).sort(sortOrder);
 
-        let dataToSend = { products };
+        const totalResults = await Product.countDocuments(filterQuery);
 
-        if(totalDocs){
-            const totalDocs = await Product.countDocuments();
-            dataToSend = { ...dataToSend, totalDocs: totalDocs || 0 }
-        }
+        const totalDocs = await Product.countDocuments();
+
+        let dataToSend = { products, totalDocs: totalResults, productInInvetory: totalDocs || 0 };
+
+        // headers().set('Cache-Control', 'no-store, max-age=0');
 
         return new Response(JSON.stringify(dataToSend), { status: 200 })
 

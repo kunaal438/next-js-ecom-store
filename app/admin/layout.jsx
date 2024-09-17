@@ -9,7 +9,7 @@ const AdminLayout = ({ children }) => {
     return (
         <div>
             <AdminCheckWrapper>
-                <div className="flex">
+                <div className="flex max-xl:flex-col">
                     <SideNavbarWrapperLayout />
                     { children }
                 </div>

@@ -13,6 +13,7 @@ const UserAuthenticationState = () => {
     useEffect(() => {
         
         const loggedInUser = JSON.parse(localStorage.getItem("user"));
+        console.log('logged in user form auth0 ', user);
         if(!loggedInUser && user){
             
             let userDetail = { fullname: user.name, email: user.email, admin: user.isAdmin, auth: true }

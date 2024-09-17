@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 'use client'
 
-import { addProductImage, forwardProductForm, reArrageProductImageOrder, removeProductImage } from "@/reducer/product.redux";
+import { addProductImage, reArrageProductImageOrder, removeProductImage } from "@/reducer/product.redux";
 import { faChevronLeft, faChevronRight, faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
@@ -11,8 +11,8 @@ import getBase64Image from "@/utils/imageToBase64";
 import Link from "next/link";
 import DeleteConfirmation from "@/components/deleteConfirmationDialogueBox.component";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import handleErrorFromServer from "@/utils/errorHandling";
+import { handleBeforeUnload } from "@/app/admin/products/add-product/addProductPageTemplate";
 
 const AddProductImagesForm = () => {
 
@@ -24,8 +24,6 @@ const AddProductImagesForm = () => {
 
     const { images, id, maxPage } = useSelector(state => state.product);
     const dispatch = useDispatch();
-
-    const router = useRouter();
 
     const maxUploadImagesLimit = 4;
 
@@ -119,7 +117,8 @@ const AddProductImagesForm = () => {
 
             setLoading(false);
             setUploadingImage(0);
-            router.push("/admin/products");
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+            window.location.href = "/admin/products";
 
         } catch(err){
             // delete all the images stored in imagesURL only if they are not inside images reducer ( then only they will be recent ones )

@@ -9,7 +9,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-const ProductManagementClientPage = ({ products }) => {
+const ProductManagementClientPage = ({ products, totalProducts }) => {
     
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -23,8 +23,12 @@ const ProductManagementClientPage = ({ products }) => {
 
     const [activeFilter, setActiveFilter] = useState(searchParams.get("filter") || filterOptions[0]);
 
+    const resultsPerPage = 10;
+
     useEffect(() => { // reseting product reducer for "add-product" form
-        dispatch(resetProductReducer())
+        
+        dispatch(resetProductReducer());
+
     }, [])
 
     const redirectForSearch = (searchKey) => {
@@ -40,6 +44,8 @@ const ProductManagementClientPage = ({ products }) => {
                 break;
 
         }
+
+        query.delete("page");
         
         router.push(`?${query.toString()}`);
     }
@@ -65,21 +71,31 @@ const ProductManagementClientPage = ({ products }) => {
                 break;
 
         }
+
+        query.delete("page")
         
         router.push(`?${query.toString()}`);
 
     }
 
+    const nextPage = () => {
+        query.set("page", page ? Number(page) + 1 : 2);
+        router.push(`?${query.toString()}`);
+    }
+
+    const prePage = () => {
+        query.set("page", Number(page) - 1);
+        router.push(`?${query.toString()}`);
+    }
+
     return (
         <>
-        <div className="relative px-6">
-            <div className="relative my-5">
-                <input onKeyDown={handleSearchBoxKeyDown} onBlur={handelSearchBoxBlur} type="text" placeholder="Search Products" className="w-full h-[50px] bg-white-200 py-2 px-5 text-sm pl-12 rounded-md" />
-                <FontAwesomeIcon icon={faMagnifyingGlass} className="absolute left-5 top-1/2 -translate-y-1/2 text-black-200" />
-            </div>
+
+        <div className="px-6 my-5">
+            <input onKeyDown={handleSearchBoxKeyDown} onBlur={handelSearchBoxBlur} type="text" placeholder="Search Products" className="w-full h-[50px] bg-white-200 py-2 px-5 text-sm rounded-md" />
         </div>
 
-        <div className="w-full py-4 border-y border-white-300 px-6 flex gap-3 items-center">
+        <div className="w-full py-4 border-y border-white-300 px-6 flex gap-3 items-center overflow-x-auto text-nowrap">
             
             <h3 className="uppercase mr-3">Filter</h3>
 
@@ -95,33 +111,54 @@ const ProductManagementClientPage = ({ products }) => {
             }
         </div>
         <div>
-            <div className="flex items-center flex-wrap">
-                {
-                    page ?
-                    <span className="rounded-md my-2 ml-2 block w-fit py-2 px-4 bg-white-200/50">Page - {page}</span>
-                    : ""
-                }
-                {
-                    activeFilter != 'all' &&
-                    <span className="rounded-md my-2 ml-2 block w-fit py-2 px-4 bg-white-200/50 capitalize">{activeFilter}</span>
-                }
-                {
-                    search ?
-                    <span className="rounded-md my-2 ml-2 block w-fit py-2 px-4 bg-white-200/50"><FontAwesomeIcon icon={faMagnifyingGlass} className="scale-75 text-black-100 mr-2" /> {search}</span>
-                    : ""
-                }
-            </div>
+            {
+                !products.length ?
+                <div className="flex items-center flex-wrap">
+                    {
+                        page ?
+                        <span className="rounded-md my-2 ml-2 block w-fit py-2 px-4 bg-white-200/50">Page - {page}</span>
+                        : ""
+                    }
+                    {
+                        activeFilter != 'all' &&
+                        <span className="rounded-md my-2 ml-2 block w-fit py-2 px-4 bg-white-200/50 capitalize">{activeFilter}</span>
+                    }
+                    {
+                        search ?
+                        <span className="rounded-md my-2 ml-2 block w-fit py-2 px-4 bg-white-200/50"><FontAwesomeIcon icon={faMagnifyingGlass} className="scale-75 text-black-100 mr-2" /> {search}</span>
+                        : ""
+                    }
+                </div> : ""
+            }
             {
                 products.length ? 
                     products.map((product,i) => {
                         return <ListProductCard key={i} product={product} />
                     })
-                : 
+                :
                 <div className="w-full h-[500px] flex items-center justify-center flex-col">
                     <Image src="/assets/no-product.png" width={500} height={500} alt="no product image" priority />
                     <p className="text-black-200 -mt-10 capitalize font-medium">No product found</p>
                 </div>
             }
+
+            <div className="mt-6 relative flex items-center px-6">
+                {
+                    page > 1 && products.length ? 
+                    <button className=" py-2 px-8 rounded-md bg-white-200/50 border border-white-300/50 text-nowrap" onClick={prePage}>Pre Page</button>
+                    : ""
+                }
+                {
+                    products.length ? 
+                    <p className="-z-10 w-full absolute top-1/2 -translate-y-1/2 left-0 text-center text-black-100">Page {page || 1}</p>
+                    : ""
+                }
+                {
+                    products.length && totalProducts > products.length * (resultsPerPage * (page || 1)) ? // next page button
+                    <button className=" ml-auto py-2 px-8 rounded-md bg-white-200/50 border border-white-300/50 text-nowrap" onClick={nextPage}>Next Page</button>
+                    : ""
+                }
+            </div>
         </div>
         </>
     )

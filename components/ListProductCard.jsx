@@ -3,11 +3,10 @@ import capitalizeFirstLetter from "@/utils/capitalizeFirstLetter";
 import { getInCurreny } from "@/utils/currenyFormat";
 import Image from "next/image";
 import InputField from "./inputs/Input.component";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArchive, faPencil, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faArchive, faEllipsis, faPencil, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
-import ExtractFormData from "@/utils/ExtractFormData.utils";
 import axios from "axios";
 import handleErrorFromServer from "@/utils/errorHandling";
 import Loader from "./Loader.component";
@@ -17,22 +16,28 @@ const ListProductCard = ({ product }) => {
 
     const { product_id, title, brand, stock, images: [product_image], price: { sellingPrice, actualPrice }, archived } = product;
 
-    const formRef = useRef();
+    const stockInpRef = useRef();
 
     const [loading, setLoading] = useState(false);
     const [productStock, setProductStock] = useState(stock);
     const [archivedStatus, setArchivedStatus] = useState(archived);
     const [archiveConfirmation, setArchiveConfirmation] = useState(false);
     const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+    const [actionsWindow, setActionWindow] = useState(false);
+    
+    useEffect(() => {
+        setProductStock(stock);
+        setArchivedStatus(archived);
+        stockInpRef.current.value = stock;
+    }, [stock, archived])
 
     const handleStockUpdate = async (e) => {
         
         e.preventDefault();
         
-        if(!formRef.current) { return }
+        if(!stockInpRef.current) { return }
 
-        const formData = ExtractFormData(formRef.current);
-        const { unit } = formData;
+        const unit = stockInpRef.current.value;
 
         if(unit != productStock){ 
             try {
@@ -60,8 +65,7 @@ const ListProductCard = ({ product }) => {
 
             await axios.put('/api/admin/product/update-archive', { product_id, archived: !archivedStatus });
             
-            setArchivedStatus(prev => !prev);
-            setLoading(false);
+            window.location.reload();
 
         } catch(err){
             setLoading(false);
@@ -122,13 +126,20 @@ const ListProductCard = ({ product }) => {
 
         <div className="p-6 flex items-center gap-2 justify-between border-y border-white-200">
             <div className="flex items-center gap-8">
-                <Link href={`/product/${product_id}`} className="w-[100px] h-[120px] rounded-md overflow-hidden">
-                    <Image src={product_image} width={100} height={200} className=" w-full h-full object-cover" priority alt="product image" />
+                <Link href={`/product/${product_id}`} className="min-w-[100px] h-[120px] rounded-md overflow-hidden">
+                    {
+                        product_image ?
+                        <Image src={product_image} width={100} height={200} className=" w-full h-full object-cover" priority alt="product image" />
+                        :
+                        <div className="w-full h-full bg-white-200 border border-white-300 rounded-md flex items-center justify-center">
+                            <p className="text-black-100">No Image</p>
+                        </div>
+                    }
                 </Link>
-                <div className="text-nowrap min-w-[300px] flex flex-col  py-2 justify-between h-[120px]">
+                <div className="min-w-[200px] flex flex-col justify-between h-[120px]">
                     <div>
-                    <p className="font-medium text-black-100 uppercase">{brand}</p>
-                    <Link href={`/product/${product_id}`} className="text-black-300 font-medium mt-2 text-base line-clamp-2 hover:underline">{capitalizeFirstLetter(title)}</Link>
+                    <p className="font-medium text-black-100 uppercase line-clamp-1 text-nowrap">{brand}</p>
+                    <Link href={archivedStatus ? `products/add-product/details?id=${product_id}` : `/product/${product_id}`} className="text-black-300 font-medium mt-2 text-base line-clamp-2 hover:underline">{capitalizeFirstLetter(title)}</Link>
                     </div>
                     <div className="flex gap-2 items-end text-base">
                         <p className="text-lg">{getInCurreny(sellingPrice)}</p>
@@ -136,18 +147,35 @@ const ListProductCard = ({ product }) => {
                     </div>  
                 </div>                
             </div>
-            <div className="flex flex-col gap-1">
-                <form ref={formRef} onSubmit={handleStockUpdate} className="flex gap-2 items-center">
-                    <InputField name="unit" type="number" placeholder="Unit" value={stock} inputClasses="max-w-[120px] border-white-300" />
-                    <button type="submit" className="text-nowrap border border-white-300 -mt-2 h-[50px] px-4 rounded-md bg-white-200/50">Update stock</button>
+            <div className="flex gap-3">
+            <div className="flex flex-col gap-1 max-md:hidden">
+                <form onSubmit={handleStockUpdate} className="flex gap-2 items-center">
+                    <InputField refVal={stockInpRef} name="unit" type="number" placeholder="Unit" value={stock} inputClasses="max-w-[120px] border-white-300" />
+                    <button type="submit" className="text-nowrap border border-white-300 -mt-2 h-[50px] px-4 rounded-md bg-white-200/50">Update</button>
                 </form>
                 <p className="text-black-100">
                     In stock - 
                     <span className="font-semibold text-black-300">{productStock} Unit(s)</span>
                 </p>
+                </div>
+                <div className="lg:hidden relative">
+                    <button className="text-nowrap border border-white-300 h-[50px] w-[50px] bg-white-100 rounded-md" onBlur={() => setTimeout(() => { setActionWindow(false) }, 300)} onClick={() => setActionWindow(pre => !pre)}>
+                        <FontAwesomeIcon icon={faEllipsis} />
+                    </button>
+                    {
+                        actionsWindow &&
+                        <div className="absolute top-[55px] z-20 right-0 flex flex-col w-[100px] rounded-md bg-white-100 border border-white-300 text-center">
+                            <Link href={`products/add-product/details?id=${product_id}`} title="edit" className="w-full px-3 py-2 border-b border-white-300">Edit</Link>
+
+                            <button title={archivedStatus ? "unarchive" : "archive"} className="w-full px-3 py-2 border-b border-white-300" onClick={() => setArchiveConfirmation(true)}> { archivedStatus ? "Unarchive" : "Archive" } </button>
+
+                            <button title="delete" onClick={() => setDeleteConfirmation(true)} className="w-full px-3 py-2 border-b border-white-300"> Delete </button>
+                        </div>
+                    }
+                </div>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 max-lg:hidden">
                 <Link href={`products/add-product/details?id=${product_id}`} title="edit" className="text-nowrap border border-white-300 h-[50px] w-[50px] bg-white-100 rounded-full flex items-center justify-center">
                     <FontAwesomeIcon icon={faPencil} />
                 </Link>
@@ -164,6 +192,7 @@ const ListProductCard = ({ product }) => {
                     <FontAwesomeIcon icon={faTrashCan} />
                 </button>
             </div>
+
         </div>
         </>
     )

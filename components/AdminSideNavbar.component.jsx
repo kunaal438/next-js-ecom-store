@@ -1,14 +1,15 @@
 'use client';
 
 import { logout } from "@/reducer/user.redux";
-import { faArrowRightFromBracket, faBox, faBoxesStacked, faHome } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRightFromBracket, faBox, faBoxesStacked, faHome, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 
-const AdminSideNavbar = () => { 
+const SideNav = ({ className, closeFunc }) => {
 
     const { email: loggedInUserEmail } = useSelector(state => state.user);
     const dispatch = useDispatch();
@@ -51,7 +52,14 @@ const AdminSideNavbar = () => {
     }
 
     return (
-        <div className="w-[300px] border-r border-white-200 relative min-h-cover bg-white-100 py-4">
+        <div className={" z-50 w-[300px] border-r border-white-200 relative min-h-cover bg-white-100 py-4 duration-300 overflow-y-auto " + className}>
+
+            {
+                closeFunc &&
+                <button className="w-10 h-10 flex items-center justify-center rounded-full bg-white-200/50 absolute top-2 right-2" onClick={() => closeFunc(false)}>
+                    <FontAwesomeIcon icon={faX} />
+                </button>
+            }
             <div className="px-4">
                 <h1 className="font-semibold text-black-300 text-sm">Admin Navigation</h1>
                 <hr className="border-white-200 mt-3" />
@@ -86,6 +94,26 @@ const AdminSideNavbar = () => {
             </button>
 
         </div>
+    )
+}
+
+const AdminSideNavbar = () => { 
+
+    const [navVisible, setNavVisible] = useState(false);
+
+    const pathname = usePathname();
+
+    return (
+        <>
+        <SideNav className="max-xl:hidden" />
+        <div className="xl:hidden w-full h-[60px] bg-white-100 border border-white-300 sticky flex top-[80px]">
+            <button className="font-medium px-12 border-b-2 border-black-300" onClick={() => setNavVisible(true)}>{pathname}</button>
+            {/* <button className="w-10 h-10 flex items-center justify-center rounded-full bg-white-200/50 absolute top-4 right-4" onClick={() => setNavVisible(false)}>
+                <FontAwesomeIcon icon={faX} />
+            </button> */}
+            <SideNav closeFunc={setNavVisible} className={ " !fixed top-[80px] " + (navVisible ? "left-0" : "-left-full")} />
+        </div>
+        </>
     )
 
 }

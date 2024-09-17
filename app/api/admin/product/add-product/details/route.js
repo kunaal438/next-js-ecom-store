@@ -26,7 +26,9 @@ export const POST = async (req) => {
  
     const formData = await req.json();
 
-    const { title, brand, color, category, tags, stock, sellingPrice, actualPrice, id, isNew } = formData;
+    let { title, brand, color, category, tags, stock, sellingPrice, actualPrice, id, isNew } = formData;
+
+    tags = tags.map(tag => tag.toLowerCase());
 
     // validate form
     const validForm = validateProductDetailsForm(formData);

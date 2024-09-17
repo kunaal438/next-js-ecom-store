@@ -11,6 +11,12 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+export const handleBeforeUnload = (event) => {
+    const message = "You have unsaved changes. Are you sure you want to leave?";
+    event.returnValue = message;
+    return message;
+};
+
 const AddProductPageTemplate = ({ children }) => {
 
     const [formComponent, outputComponent] = children;
@@ -27,12 +33,6 @@ const AddProductPageTemplate = ({ children }) => {
     const router = useRouter();
 
     const { maxPage } = useSelector(state => state.product);
-
-    const handleBeforeUnload = (event) => {
-        const message = "You have unsaved changes. Are you sure you want to leave?";
-        event.returnValue = message;
-        return message;
-    };
 
     useEffect(() => {
 
