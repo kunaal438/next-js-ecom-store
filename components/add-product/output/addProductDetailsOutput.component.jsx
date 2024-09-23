@@ -9,8 +9,8 @@ const AddProductDetailsOutput = () => {
     const { title, brand, price: { sellingPrice, actualPrice }, images } = useSelector(state => state.product)
 
     return (
-        <div className=" w-full flex items-center justify-center">
-            <div className="absolute top-1/2 -translate-y-1/2 w-[350px] bg-white-100  p-10 rounded-md">
+        <div className="w-full max-lg:min-h-[80vh] h-auto flex items-center justify-center">
+            <div className="w-[350px] bg-white-100 p-10 rounded-md">
 
                 <div className="relative bg-white-200/50 border border-white-300/20 h-[350px] rounded-sm">
                     {

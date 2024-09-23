@@ -8,7 +8,9 @@ const InputField = ({ refVal, type, placeholder, name, displayError, max, onChan
     
     const addFocus = () => { setInputFocus(true) }
 
-    const removeFocus = (e) => { !e.target.value.length && setInputFocus(false) }
+    const removeFocus = (e) => { 
+        !e.target.value.length && setInputFocus(false)
+    }
 
     const handleBlur = (e) => {
 
@@ -20,9 +22,27 @@ const InputField = ({ refVal, type, placeholder, name, displayError, max, onChan
 
     const preventNumArrowKeysFromFunction = (e) => { (e.key == "ArrowUp" || e.key == "ArrowDown") && e.preventDefault(); }
 
+    const allowOnlyNumbers = (e) => {
+
+        const allowedKeys = [
+            'Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 
+        ];
+    
+        if ( allowedKeys.includes(e.key) || (e.key >= '0' && e.key <= '9') || (e.key >= 'Numpad0' && e.key <= 'Numpad9')) {
+            return; // Allow these keys
+        } else {
+            e.preventDefault();
+        }
+
+    }
+
     const handleKeyDown = (e) => {
 
-        (type == "number") && preventNumArrowKeysFromFunction(e);
+        if (type == "number") {
+            // block all keys except num keys
+            allowOnlyNumbers(e);
+            preventNumArrowKeysFromFunction(e)
+        }
 
         onKeyDown && onKeyDown(e); // add any keyDown event
 

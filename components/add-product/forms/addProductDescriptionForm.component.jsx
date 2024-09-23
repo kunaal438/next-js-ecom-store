@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import TextArea from "@/components/inputs/TextArea.component";
 import Loader from "@/components/Loader.component";
 import { forwardProductForm, setProductDescription, setProductMaterialCare } from "@/reducer/product.redux";
@@ -94,12 +95,12 @@ const AddProductDescriptionForm = () => {
                 </div>
 
                 <div className="flex items-center justify-between mt-8">
-                    <Link href="/admin/products/add-product/details" className="flex gap-4 py-3 px-8 font-semibold hover:bg-white-200/50 items-center">
+                    <Link href="/admin/products/add-product/details" className="flex gap-4 py-3 !px-5 sm:!px-8 font-semibold hover:bg-white-200/50 items-center">
                         <FontAwesomeIcon icon={faChevronLeft} />
-                        Return to product&apos;s details
+                        <p className="max-sm:capitalize"><span className="max-sm:hidden">Return to product's </span>details</p>
                     </Link>
 
-                    <button className="primary_btn py-3 px-8 !rounded-md" type="submit">
+                    <button className="primary_btn py-3 !px-5 sm:!px-8 !rounded-md" type="submit">
                         Save & Continue
                     </button>
                 </div>

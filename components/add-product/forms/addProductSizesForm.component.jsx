@@ -211,7 +211,7 @@ const AddProductSizesForm = () => {
 
             {
                 editingSize == null ?
-                <div className="mt-8 flex gap-4 flex-wrap gap-y-20 ">
+                <div className={"mt-8 flex gap-4 flex-wrap " + (activeSizeBtn ? "gap-y-16" : "")}>
                 {
                     sizes.map((size, i) => {
 
@@ -260,12 +260,12 @@ const AddProductSizesForm = () => {
             }
 
             <div className="flex items-center justify-between mt-12">
-                <Link href="/admin/products/add-product/description" className="flex gap-4 py-3 px-8 font-semibold hover:bg-white-200/50 items-center">
+                <Link href="/admin/products/add-product/description" className="flex gap-4 py-3 max-sm:!px-5 !px-8 font-semibold hover:bg-white-200/50 items-center">
                     <FontAwesomeIcon icon={faChevronLeft} />
-                    Return to product's description
+                    <p className="max-sm:capitalize"><span className="max-sm:hidden">Return to product's </span>description</p>
                 </Link>
 
-                <button className="primary_btn py-3 px-8 !rounded-md" onClick={handleSubmit}>
+                <button className="primary_btn py-3 max-sm:!px-5 !px-8 !rounded-md" onClick={handleSubmit}>
                     Save & Continue
                 </button>
             </div>

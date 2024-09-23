@@ -162,7 +162,7 @@ const AddProductImagesForm = () => {
 
             <div className="mt-10">
                 
-                <div className="flex gap-5 items-end">
+                <div className="flex gap-5 items-end flex-wrap">
                     <input name="files[]" multiple type="file" accept=".png, .jpg, .jpeg" hidden id="imagesUpload" onChange={handleImageFiles} />
                     <label htmlFor="imagesUpload" className="py-2 px-8 rounded-md bg-white-200/50 flex gap-3 items-center border border-white-300/50 cursor-pointer">
                         <FontAwesomeIcon icon={faUpload} />
@@ -222,12 +222,12 @@ const AddProductImagesForm = () => {
                 </div>
 
                 <div className="flex items-center justify-between mt-14">
-                    <Link href="/admin/products/add-product/sizes" className="flex gap-4 py-3 px-8 font-semibold hover:bg-white-200/50 items-center">
+                    <Link href="/admin/products/add-product/sizes" className="flex gap-4 py-3 max-sm:!px-5 !px-8 font-semibold hover:bg-white-200/50 items-center">
                         <FontAwesomeIcon icon={faChevronLeft} />
-                        Return to product's sizes
+                        <p className="max-sm:capitalize"><span className="max-sm:hidden">Return to product's </span>sizes</p>
                     </Link>
 
-                    <button className="primary_btn py-3 px-8 !rounded-md" onClick={handleSubmit}>
+                    <button className="primary_btn py-3 max-sm:!px-5 !px-8 !rounded-md" onClick={handleSubmit}>
                         Save & Continue
                     </button>
                 </div>

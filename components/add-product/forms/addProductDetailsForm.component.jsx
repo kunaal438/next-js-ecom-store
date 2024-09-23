@@ -223,7 +223,7 @@ const AddProductDetailsForm = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
 
-                    <div className="flex max-xl:col-span-2">
+                    <div className="flex max-sm:col-span-1 max-xl:col-span-2">
                         <div className={"input-box-side-icon-parent " + (formErrors.stock?.length ? "!border-red-200" : "")}>
                             <FontAwesomeIcon icon={faBoxesStacked} />
                         </div>
@@ -353,12 +353,12 @@ const AddProductDetailsForm = () => {
                 </div>
                 
                 <div className="flex items-center justify-between mt-8">
-                    <Link href="/admin/products" className="flex gap-4 py-3 px-8 font-semibold hover:bg-white-200/50 items-center">
+                    <Link href="/admin/products" className="flex gap-4 py-3 !px-5 sm:!px-8 font-semibold hover:bg-white-200/50 items-center">
                         <FontAwesomeIcon icon={faChevronLeft} />
-                        Return to products
+                        <p className="max-sm:capitalize"><span className="max-sm:hidden">Return to </span>products</p>
                     </Link>
 
-                    <button className="primary_btn py-3 px-8 !rounded-md" type="submit">
+                    <button className="primary_btn py-3 !px-5 sm:!px-8 !rounded-md" type="submit">
                         Save & Continue
                     </button>
                 </div>

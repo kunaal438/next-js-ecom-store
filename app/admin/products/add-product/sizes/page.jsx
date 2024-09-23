@@ -12,16 +12,16 @@ const AddProductSizesPage = () => {
     const router = useRouter();
     const { id, maxPage } = useSelector(state => state.product);
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if(!id){
-            router.push('details');
-        }
-        else if(maxPage < 3){
-            router.push('description');
-        }
+    //     if(!id){
+    //         router.push('details');
+    //     }
+    //     else if(maxPage < 3){
+    //         router.push('description');
+    //     }
 
-    }, [id])
+    // }, [id])
 
     return (
         <AddProductPageTemplate>
