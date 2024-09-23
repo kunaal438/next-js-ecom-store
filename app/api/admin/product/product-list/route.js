@@ -2,7 +2,6 @@ import Product from "@/schema/Product.schema";
 import validAdminRequest from "@/utils/backend/adminVerification.utils"
 import connectDB from "@/utils/backend/connectMongoDB";
 import extractParamsFromRequest from "@/utils/backend/extractParamsFromReq";
-import { headers } from "next/headers";
 
 export const GET = async (req) => {
 
@@ -14,7 +13,7 @@ export const GET = async (req) => {
 
     try {
 
-        const { search, filter, page } = extractParamsFromRequest(req);
+        const { search, filter, page, productInInvetory } = extractParamsFromRequest(req);
 
         await connectDB();
 
@@ -26,7 +25,7 @@ export const GET = async (req) => {
         if(search && search.length){
             filterQuery = { 
                 ...filterQuery, 
-                title: { $regex: `^${search}`, $options: 'i' } 
+                title: { $regex: search, $options: 'i' } 
             }
         }
 
@@ -55,11 +54,12 @@ export const GET = async (req) => {
 
         const totalResults = await Product.countDocuments(filterQuery);
 
-        const totalDocs = await Product.countDocuments();
+        let dataToSend = { products, totalDocs: totalResults }
 
-        let dataToSend = { products, totalDocs: totalResults, productInInvetory: totalDocs || 0 };
-
-        // headers().set('Cache-Control', 'no-store, max-age=0');
+        if(productInInvetory){
+            let totalDocs = await Product.countDocuments();
+            dataToSend = { ...dataToSend, productInInvetory: totalDocs || 0 }
+        }
 
         return new Response(JSON.stringify(dataToSend), { status: 200 })
 
