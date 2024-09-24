@@ -91,8 +91,8 @@ const AddProductPageTemplate = ({ children }) => {
                             formSteps.map((step,i) => {
                                 return (
                                     <div key={i} className="flex gap-1 items-center">
-                                        {/* <Link href={step} className={"capitalize hover:underline " + ( pathname.includes(step) ? " text-black-300 font-semibold " : " text-black-100 " ) + (i + 1 <= maxPage ? " pointer-events-auto ": " pointer-events-none ")}>{step}</Link> */}
-                                        <Link href={step} className={"capitalize hover:underline " + ( pathname.includes(step) ? " text-black-300 font-semibold " : " text-black-100 " ) }>{step}</Link>
+                                        <Link href={step} className={"capitalize hover:underline " + ( pathname.includes(step) ? " text-black-300 font-semibold " : " text-black-100 " ) + (i + 1 <= maxPage ? " pointer-events-auto ": " pointer-events-none ")}>{step}</Link>
+                                        {/* <Link href={step} className={"capitalize hover:underline " + ( pathname.includes(step) ? " text-black-300 font-semibold " : " text-black-100 " ) }>{step}</Link> */}
                                         {
                                             (i != formSteps.length - 1) && 
                                             <FontAwesomeIcon className="scale-[0.6] text-black-100" icon={faChevronRight} />

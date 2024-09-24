@@ -52,7 +52,7 @@ const SideNav = ({ className, closeFunc }) => {
     }
 
     return (
-        <div className={" z-50 w-[300px] border-r border-white-200 relative min-h-cover bg-white-100 py-4 duration-300 overflow-y-auto " + className}>
+        <div className={" z-50 w-[300px] border-r border-white-200 min-h-cover sticky top-[80px] bg-white-100 py-4 duration-300 overflow-y-auto " + className}>
 
             {
                 closeFunc &&
@@ -104,16 +104,16 @@ const AdminSideNavbar = () => {
     const pathname = usePathname();
 
     return (
-        <>
-        <SideNav className="max-xl:hidden" />
-        <div className="xl:hidden w-full h-[60px] bg-white-100 border border-white-300 sticky flex top-[80px]">
-            <button className="font-medium px-12 border-b-2 border-black-300" onClick={() => setNavVisible(true)}>{pathname}</button>
-            {/* <button className="w-10 h-10 flex items-center justify-center rounded-full bg-white-200/50 absolute top-4 right-4" onClick={() => setNavVisible(false)}>
-                <FontAwesomeIcon icon={faX} />
-            </button> */}
-            <SideNav closeFunc={setNavVisible} className={ " !fixed top-[80px] " + (navVisible ? "left-0" : "-left-full")} />
+        <div className="-z-10">
+            <SideNav className="max-xl:hidden" />
+            <div className="xl:hidden w-full h-[60px] bg-white-100 border border-white-300 sticky flex top-[80px]">
+                <button className="font-medium px-12 border-b-2 border-black-300" onClick={() => setNavVisible(true)}>{pathname}</button>
+                {/* <button className="w-10 h-10 flex items-center justify-center rounded-full bg-white-200/50 absolute top-4 right-4" onClick={() => setNavVisible(false)}>
+                    <FontAwesomeIcon icon={faX} />
+                </button> */}
+                <SideNav closeFunc={setNavVisible} className={ " !fixed top-[80px] " + (navVisible ? "left-0" : "-left-full")} />
+            </div>
         </div>
-        </>
     )
 
 }

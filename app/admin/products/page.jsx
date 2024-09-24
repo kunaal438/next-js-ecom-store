@@ -167,7 +167,7 @@ const AdminProductsManagementPage = () => {
                 }
             </div>
             
-            <div>
+            <div className="relative pb-10">
             {
                 !products.length ?
                 <div className="flex items-center flex-wrap">
@@ -199,24 +199,25 @@ const AdminProductsManagementPage = () => {
                     <p className="text-black-200 -mt-10 capitalize font-medium">No product found</p>
                 </div>
             }
-            </div>
 
-            <div className="mt-6 relative flex items-center px-6">
-                    {
-                        page > 1 && products.length ? 
-                        <button className=" py-2 px-8 rounded-md bg-white-200/50 border border-white-300/50 text-nowrap" onClick={prePage}>Pre Page</button>
-                        : ""
-                    }
-                    {
-                        products.length ? 
-                        <p className="-z-10 w-full absolute top-1/2 -translate-y-1/2 left-0 text-center text-black-100">Page {page || 1}</p>
-                        : ""
-                    }
-                    {
-                        products.length && totalProducts > products.length * (resultsPerPage * (page || 1)) ? // next page button
-                        <button className=" ml-auto py-2 px-8 rounded-md bg-white-200/50 border border-white-300/50 text-nowrap" onClick={nextPage}>Next Page</button>
-                        : ""
-                    }
+                <div className="mt-6 relative flex items-center px-6">
+                        {
+                            page > 1 && products.length ? 
+                            <button className=" py-2 px-8 rounded-md bg-white-200/50 border border-white-300/50 text-nowrap" onClick={prePage}>Pre Page</button>
+                            : ""
+                        }
+                        {
+                            products.length ? 
+                            <p className="-z-10 w-full absolute top-1/2 -translate-y-1/2 left-0 text-center text-black-100">Page {page || 1}</p>
+                            : ""
+                        }
+                        {
+                            products.length && totalProducts > products.length * (resultsPerPage * (page || 1)) ? // next page button
+                            <button className=" ml-auto py-2 px-8 rounded-md bg-white-200/50 border border-white-300/50 text-nowrap" onClick={nextPage}>Next Page</button>
+                            : ""
+                        }
+                </div>
+
             </div>
 
         </div>

@@ -10,10 +10,10 @@ import { UserProvider } from "@auth0/nextjs-auth0/client";
 
 const LayoutWithProvider = ({ children }) => {
 
-    const navbarToBeHiddenOnPaths = ["/add-product"];
+    const navbarToBeHiddenOnPaths = ["/admin/products/add-product/details", "/admin/products/add-product/description", "/admin/products/add-product/sizes", "/admin/products/add-product/images"];
     const pathname = usePathname();
 
-    const showNavbar = !navbarToBeHiddenOnPaths.some(path => pathname.includes(path));
+    const showNavbar = !navbarToBeHiddenOnPaths.some(path => path == pathname);
 
     return (
         <Provider store={store}>
